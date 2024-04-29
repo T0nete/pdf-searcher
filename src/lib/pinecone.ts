@@ -2,6 +2,7 @@ import { downloadFileFromBucket } from './supabase';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { Document } from 'langchain/document';
+import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { truncate } from 'fs';
 
@@ -36,11 +37,16 @@ export const uploadFileToPinecone = async (fileName: string) => {
     const loader = new PDFLoader(blobFile);
     const pdfPages: PDFPage[] = (await loader.load()) as PDFPage[];
 
-    // 3. Split the pages into smaller chunks to create the vectors embeddings for each chunk
-    const pdfVectors = await Promise.all(
+    // 3. Split the pages into smaller chunks
+    const pdfChunks = await Promise.all(
       pdfPages.map((pdf) => prepareDocument(pdf))
     );
-    console.log(pdfVectors);
+
+    // 4. Get the vector embeddings
+    const vectors = await Promise.all(
+      pdfChunks.flat().map((chunk) => getEmbeddings(chunk))
+    );
+    console.log(vectors);
 
     // 4. Upload the vector embeddings to Pinecone
   } catch (error) {
@@ -65,4 +71,12 @@ const prepareDocument = async (page: PDFPage) => {
   });
   const docs = await splitter.splitDocuments([document]);
   return docs;
+};
+
+const getEmbeddings = async (document: Document) => {
+  const embeddings = new OpenAIEmbeddings({
+    apiKey: process.env.OPENAI_API_KEY!,
+  });
+
+  return await embeddings.embedDocuments([document.pageContent]);
 };
