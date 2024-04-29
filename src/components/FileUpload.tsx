@@ -1,8 +1,8 @@
 'use client';
 
-import { uploadFileToBucket } from '@/lib/supabase';
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
+import { uploadFileToBucket } from '@/lib/supabase';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -21,6 +21,14 @@ const FileUpload = () => {
       const file = acceptedFiles[0];
       try {
         await uploadFileToBucket(file);
+        const res = await fetch('/api/create-chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ fileName: file.name }),
+        });
+        console.log(res);
       } catch (error) {
         console.error(error);
         return;
