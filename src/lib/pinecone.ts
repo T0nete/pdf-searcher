@@ -1,6 +1,9 @@
+import { downloadFileFromBucket } from './supabase';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
-import { downloadFileFromBucket } from './supabase';
+import { Document } from 'langchain/document';
+import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { truncate } from 'fs';
 
 export const getPineConeClient = () => {
   return new Pinecone({
@@ -8,8 +11,17 @@ export const getPineConeClient = () => {
   });
 };
 
+type PDFPage = {
+  pageContent: string;
+  metadata: {
+    source: string;
+    blobType: string;
+    loc: { pageNumber: 1 };
+  };
+};
 export const uploadFileToPinecone = async (fileName: string) => {
   try {
+    console.log('Uploading file to Pinecone');
     // 1. Download the file from the Supabase Storage
     let blobFile: Blob | null = null;
     try {
@@ -19,17 +31,33 @@ export const uploadFileToPinecone = async (fileName: string) => {
       return;
     }
 
-    // 2. Divide the file by pages
+    // 2. Read pdf data and divide it by pages
+    console.log('Loading PDF file...');
     const loader = new PDFLoader(blobFile);
-    console.log('loader', loader);
-    const docs = await loader.load();
-    console.log('docs', docs);
+    const pdfPages: PDFPage[] = (await loader.load()) as PDFPage[];
 
     // 3. Split the pages into smaller chunks
+    const splitedDocument = await Promise.all(
+      pdfPages.map((pdf) => prepareDocument(pdf))
+    );
+    console.log(splitedDocument);
+
     // 4. Create the vector embeddings for each chunk
     // 5. Truncate the vector embeddings to fit with Pinecone's maximum size
     // 6. Upload the vector embeddings to Pinecone
   } catch (error) {
     console.error('Unexpected Error uploading file: ', error);
   }
+};
+
+const prepareDocument = async (page: PDFPage) => {
+  const splitter = new RecursiveCharacterTextSplitter();
+  const document = new Document({
+    pageContent: page.pageContent,
+    metadata: {
+      pageNumber: page.metadata.loc.pageNumber,
+    },
+  });
+  const docs = await splitter.splitDocuments([document]);
+  return docs;
 };
