@@ -7,9 +7,9 @@ export const supabaseClient = createClient(
 
 export const uploadFileToBucket = async (file: File) => {
   try {
-    const { data, error } = await supabaseClient.storage
+    const { error } = await supabaseClient.storage
       .from('pdf')
-      .upload(file.name, file);
+      .update(file.name, file);
 
     if (error) {
       console.error('Error uploading file: ', error);
@@ -18,6 +18,24 @@ export const uploadFileToBucket = async (file: File) => {
   } catch (error) {
     console.error('Unexpected Error uploading file: ', error);
     let errorMessage = 'An error occurred while uploading the file';
+    throw new Error(errorMessage);
+  }
+};
+
+export const downloadFileFromBucket = async (fileName: string) => {
+  try {
+    const { data, error } = await supabaseClient.storage
+      .from('pdf')
+      .download(fileName);
+
+    if (error) {
+      console.error('Error downloading file: ', error);
+      throw new Error(error.message);
+    }
+    return data;
+  } catch (error) {
+    console.error('Unexpected Error downloading file: ', error);
+    let errorMessage = 'An error occurred while downloading the file';
     throw new Error(errorMessage);
   }
 };
