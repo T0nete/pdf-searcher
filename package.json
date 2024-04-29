@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@pinecone-database/pinecone": "^2.2.0",
     "@supabase/supabase-js": "^2.42.7",
     "ai": "^3.0.35",
+    "langchain": "^0.1.36",
     "next": "14.2.3",
     "openai": "^4.38.5",
+    "pdf-parse": "^1.1.1",
+    "pdf-parser": "^1.0.5",
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
