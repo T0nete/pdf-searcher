@@ -36,26 +36,31 @@ export const uploadFileToPinecone = async (fileName: string) => {
     const loader = new PDFLoader(blobFile);
     const pdfPages: PDFPage[] = (await loader.load()) as PDFPage[];
 
-    // 3. Split the pages into smaller chunks
-    const splitedDocument = await Promise.all(
+    // 3. Split the pages into smaller chunks to create the vectors embeddings for each chunk
+    const pdfVectors = await Promise.all(
       pdfPages.map((pdf) => prepareDocument(pdf))
     );
-    console.log(splitedDocument);
+    console.log(pdfVectors);
 
-    // 4. Create the vector embeddings for each chunk
-    // 5. Truncate the vector embeddings to fit with Pinecone's maximum size
-    // 6. Upload the vector embeddings to Pinecone
+    // 4. Upload the vector embeddings to Pinecone
   } catch (error) {
     console.error('Unexpected Error uploading file: ', error);
   }
 };
 
+const truncateStringByBytes = (str: string, length: number) => {
+  return str.length > length ? str.slice(0, length) : str;
+};
+
 const prepareDocument = async (page: PDFPage) => {
   const splitter = new RecursiveCharacterTextSplitter();
+
+  // Pinecone Document metadata is limited to 40960 bytes of data
   const document = new Document({
     pageContent: page.pageContent,
     metadata: {
       pageNumber: page.metadata.loc.pageNumber,
+      text: truncateStringByBytes(page.pageContent, 35000),
     },
   });
   const docs = await splitter.splitDocuments([document]);
