@@ -2,9 +2,7 @@ import { downloadFileFromBucket } from './supabase';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { Document } from 'langchain/document';
-import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { truncate } from 'fs';
 import { getEmbeddings } from './openai';
 
 export const getPineConeClient = () => {
@@ -47,9 +45,13 @@ export const uploadFileToPinecone = async (fileName: string) => {
     const vectors = await Promise.all(
       pdfChunks.flat().map((chunk) => getEmbeddings(chunk))
     );
-    console.log(vectors);
 
     // 5. Upload the vector embeddings to Pinecone
+    const pinecone = getPineConeClient();
+    const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX!);
+    const pineconeNamespace = pineconeIndex.namespace(fileName); // Create a namespace for the PDFs with the file name
+    await pineconeNamespace.upsert(vectors);
+    console.log('PDF file uploaded to Pinecone!');
   } catch (error) {
     console.error('Unexpected Error uploading file: ', error);
   }
