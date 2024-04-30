@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
-import { uploadFileToBucket } from '@/lib/supabase';
+import { uploadFileToBucket } from '@/lib/supabase/supabase';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);

@@ -1,4 +1,4 @@
-import { uploadFileToPinecone } from '@/lib/pinecone';
+import { uploadFileToPinecone } from '@/lib/pinecone/pinecone';
 import { NextResponse } from 'next/server';
 
 export const POST = async (req: Request, res: Response) => {

@@ -1,15 +1,9 @@
-import { downloadFileFromBucket } from './supabase';
-import { Pinecone } from '@pinecone-database/pinecone';
+import { downloadFileFromBucket } from '../supabase/supabase';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { Document } from 'langchain/document';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
-import { getEmbeddings } from './openai';
-
-export const getPineConeClient = () => {
-  return new Pinecone({
-    apiKey: process.env.PINECONE_API_KEY!,
-  });
-};
+import { getEmbeddings } from '../openai/openai-embeddings';
+import { getPineConeClient } from './pinecone-client';
 
 type PDFPage = {
   pageContent: string;
