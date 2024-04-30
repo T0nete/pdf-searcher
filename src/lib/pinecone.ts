@@ -5,6 +5,7 @@ import { Document } from 'langchain/document';
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { truncate } from 'fs';
+import { getEmbeddings } from './openai';
 
 export const getPineConeClient = () => {
   return new Pinecone({
@@ -48,7 +49,7 @@ export const uploadFileToPinecone = async (fileName: string) => {
     );
     console.log(vectors);
 
-    // 4. Upload the vector embeddings to Pinecone
+    // 5. Upload the vector embeddings to Pinecone
   } catch (error) {
     console.error('Unexpected Error uploading file: ', error);
   }
@@ -69,14 +70,6 @@ const prepareDocument = async (page: PDFPage) => {
       text: truncateStringByBytes(page.pageContent, 35000),
     },
   });
-  const docs = await splitter.splitDocuments([document]);
+  const docs = (await splitter.splitDocuments([document])) as PDFPage[];
   return docs;
-};
-
-const getEmbeddings = async (document: Document) => {
-  const embeddings = new OpenAIEmbeddings({
-    apiKey: process.env.OPENAI_API_KEY!,
-  });
-
-  return await embeddings.embedDocuments([document.pageContent]);
 };
