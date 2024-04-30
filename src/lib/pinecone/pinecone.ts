@@ -4,6 +4,7 @@ import { Document } from 'langchain/document';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { getEmbeddings } from '../openai/openai-embeddings';
 import { getPineConeClient } from './pinecone-client';
+import { PineconeRecord } from '@pinecone-database/pinecone';
 
 type PDFPage = {
   pageContent: string;
@@ -37,7 +38,7 @@ export const uploadFileToPinecone = async (fileName: string) => {
 
     // 4. Get the vector embeddings
     const vectors = await Promise.all(
-      pdfChunks.flat().map((chunk) => getEmbeddings(chunk))
+      pdfChunks.flat().map((chunk) => getEmbeddedVectors(chunk))
     );
 
     // 5. Upload the vector embeddings to Pinecone
@@ -68,4 +69,24 @@ const prepareDocument = async (page: PDFPage) => {
   });
   const docs = (await splitter.splitDocuments([document])) as PDFPage[];
   return docs;
+};
+
+const getEmbeddedVectors = async (document: Document) => {
+  const embeddings = await getEmbeddings(document.pageContent);
+
+  // To store the embeddings in Pinecone, we need to convert them to a PineconeRecord
+  const pineconeId = Math.random().toString(36).substring(7);
+  const {
+    loc: { pageNumber },
+    text,
+  } = document.metadata;
+
+  return {
+    id: pineconeId,
+    values: embeddings,
+    metadata: {
+      pageNumber,
+      text,
+    },
+  } as PineconeRecord;
 };
