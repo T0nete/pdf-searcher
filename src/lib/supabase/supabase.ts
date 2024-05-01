@@ -5,7 +5,7 @@ export const uploadFileToBucket = async (file: File) => {
   try {
     const { error } = await supabaseClient.storage
       .from('pdf')
-      .update(file.name, file);
+      .upload(file.name, file);
 
     if (error) {
       console.error('Error uploading file: ', error);
