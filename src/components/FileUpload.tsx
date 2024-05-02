@@ -3,6 +3,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { uploadFileToBucket } from '@/lib/supabase/supabase';
+import UploadIcon from './icons/UploadIcon';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -41,6 +42,8 @@ const FileUpload = () => {
     },
   });
 
+  console.log('isDragActive', isDragActive);
+
   const handleSubmitButton = () => {
     if (!fileName) {
       return;
@@ -58,20 +61,22 @@ const FileUpload = () => {
   };
 
   return (
-    <>
-      <div className="p-4 bg-red border border-sky-600 rounded-xl">
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here ...</p>
-          ) : (
-            <p>Drag n drop some files here, or click to select files</p>
-          )}
-        </div>
+    <div
+      {...getRootProps()}
+      className="group rounded border border-light-gray bg-dark-gray hover:cursor-pointer hover:border-brand-orange transition-all duration-300"
+    >
+      <div className="p-32">
+        <input {...getInputProps()} />
+        {isDragActive ? (
+          <p>Drop the files here ...</p>
+        ) : (
+          <div className="flex flex-col items-center">
+            <p className="text-2xl">Upload your PDF!</p>
+            <UploadIcon className="w-24 h-24 text-light-gray group-hover:text-white transition-all duration-300" />
+          </div>
+        )}
       </div>
-      <div className="space-y-36" />
-      <button onClick={handleSubmitButton}>TEST</button>
-    </>
+    </div>
   );
 };
 
