@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/dosis": "^5.0.20",
     "@langchain/openai": "^0.0.28",
     "@pinecone-database/pinecone": "^2.2.0",
     "@supabase/supabase-js": "^2.42.7",
