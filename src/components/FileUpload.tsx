@@ -4,6 +4,7 @@ import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { uploadFileToBucket } from '@/lib/supabase/supabase';
 import UploadIcon from './icons/UploadIcon';
+import LoadingIcon from './icons/LoadingIcon';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -31,18 +32,15 @@ const FileUpload = () => {
           },
           body: JSON.stringify({ fileName: file.name }),
         });
-        // console.log(res);
         setFileName(file.name);
       } catch (error) {
         console.error(error);
         return;
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     },
   });
-
-  console.log('isDragActive', isDragActive);
 
   const handleSubmitButton = () => {
     if (!fileName) {
@@ -63,18 +61,35 @@ const FileUpload = () => {
   return (
     <div
       {...getRootProps()}
-      className="group rounded border border-light-gray bg-dark-gray hover:cursor-pointer hover:border-brand-orange transition-all duration-300"
+      className={`group rounded border border-light-gray bg-dark-gray hover:cursor-pointer hover:border-brand-orange shadow-md hover:shadow-brand-orange transition-all duration-300 ${
+        isDragActive
+          ? 'border-brand-orange shadow-brand-orange transition-all duration-300'
+          : ''
+      }`}
     >
-      <div className="p-32">
+      <div className="w-96 h-96 flex items-center justify-center">
         <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the files here ...</p>
-        ) : (
-          <div className="flex flex-col items-center">
-            <p className="text-2xl">Upload your PDF!</p>
-            <UploadIcon className="w-24 h-24 text-light-gray group-hover:text-white transition-all duration-300" />
-          </div>
-        )}
+        <div className="text-2xl">
+          {isLoading ? (
+            <div className="flex flex-row gap-2 items-center text-brand-orange">
+              <LoadingIcon className="h-12 w-12" />
+              <p>Processing...</p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              {isDragActive ? (
+                <p>Drop the files here ...</p>
+              ) : (
+                <p>Upload your PDF!</p>
+              )}
+              <UploadIcon
+                className={`w-24 h-24 text-light-gray group-hover:text-white transition-all duration-300 ${
+                  isDragActive ? 'text-white' : ' '
+                }`}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
