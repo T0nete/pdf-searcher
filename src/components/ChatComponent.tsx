@@ -1,12 +1,18 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { useChat } from 'ai/react';
 
-const ChatComponent = () => {
+interface ChatComponentProps {
+  className?: string;
+}
+const ChatComponent = (props: ChatComponentProps) => {
   const { messages, input, handleInputChange, handleSubmit } = useChat();
 
   return (
-    <div className="flex flex-col w-full max-w-md mx-auto stretch justify-between">
+    <div
+      className={cn('flex flex-col  stretch justify-between', props.className)}
+    >
       <div className="overflow-y-auto max-h-[85vh]">
         {messages.map((m) => (
           <div
