@@ -7,7 +7,6 @@ export const POST = async (req: Request) => {
     'What is the name of the person?',
     fileName
   );
-  console.log(response);
 
   return NextResponse.json({ response });
 };

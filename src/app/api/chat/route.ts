@@ -19,8 +19,6 @@ export async function POST(req: Request) {
     'TFM_Grupo4_Entrega_Final (1).pdf'
   );
 
-  console.log(context);
-
   const prompt = [
     {
       role: 'system',
