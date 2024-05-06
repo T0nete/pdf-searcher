@@ -44,22 +44,6 @@ const FileUpload = () => {
     },
   });
 
-  const handleSubmitButton = () => {
-    if (!fileName) {
-      return;
-    }
-    console.log('fileName', fileName);
-
-    console.log(fileName);
-    const res = fetch('/api/chat-test', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ fileName }),
-    });
-  };
-
   return (
     <div
       {...getRootProps()}
