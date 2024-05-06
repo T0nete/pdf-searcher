@@ -2,15 +2,18 @@
 
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
-import { uploadFileToBucket } from '@/lib/supabase/supabase';
+import { uploadFileToBucket } from '@/lib/supabase/supabase-storage';
 import UploadIcon from './icons/UploadIcon';
 import LoadingIcon from './icons/LoadingIcon';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [fileName, setFileName] = React.useState<string | null>(
     'TFM_Grupo4_Entrega_Final (1).pdf'
   );
+  const router = useRouter();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -23,16 +26,15 @@ const FileUpload = () => {
       // Validate file size
       // Upload file to Supabase
       const file = acceptedFiles[0];
+      const fileName = file.name.replace(/\s/g, '-');
       try {
-        await uploadFileToBucket(file);
-        const res = await fetch('/api/create-chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fileName: file.name }),
+        await uploadFileToBucket(file, fileName);
+
+        const res = await axios.post('/api/create-chat', {
+          fileName: fileName,
         });
-        setFileName(file.name);
+
+        router.push(`/chat/${res.data.chatId}`);
       } catch (error) {
         console.error(error);
         return;
