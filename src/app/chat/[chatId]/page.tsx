@@ -6,7 +6,11 @@ import PDFViewer from '@/components/PDFViewer';
 import ArrowLeft from '@/components/icons/ArrowLeft';
 import ArrowRight from '@/components/icons/ArrowRight';
 
-type Props = {};
+type Props = {
+  params: {
+    chatId: string;
+  };
+};
 
 const ChatPage = (props: Props) => {
   const [showPDF, setShowPDF] = React.useState(true);
@@ -15,7 +19,7 @@ const ChatPage = (props: Props) => {
     <div className="flex flex-row h-full pb-6 gap-6">
       {showPDF ? (
         <div className="hidden md:block w-full">
-          <PDFViewer pdfUrl="https://zftjtzijdbkonkjzglkh.supabase.co/storage/v1/object/public/pdf/TFG.pdf?t=2024-05-04T15%3A04%3A40.579Z" />
+          <PDFViewer chatId={props.params.chatId ?? ''} />
         </div>
       ) : null}
       <div
@@ -31,7 +35,6 @@ const ChatPage = (props: Props) => {
         </div>
         <ChatComponent className="h-full" />
       </div>
-      {/* <ChatComponent className="" /> */}
     </div>
   );
 };
