@@ -34,3 +34,7 @@ export const downloadFileFromBucket = async (fileName: string) => {
     throw new Error(errorMessage);
   }
 };
+
+export const getPublicUrl = (fileName: string) => {
+  return supabaseClient.storage.from('pdf').getPublicUrl(fileName);
+};
