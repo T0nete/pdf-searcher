@@ -5,6 +5,8 @@ import ChatComponent from '@/components/ChatComponent';
 import PDFViewer from '@/components/PDFViewer';
 import ArrowLeft from '@/components/icons/ArrowLeft';
 import ArrowRight from '@/components/icons/ArrowRight';
+import { getPdfUrl } from '@/lib/supabase/supabase-chats';
+import LoadingIcon from '@/components/icons/LoadingIcon';
 
 type Props = {
   params: {
@@ -14,12 +16,28 @@ type Props = {
 
 const ChatPage = (props: Props) => {
   const [showPDF, setShowPDF] = React.useState(true);
+  const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchPdfUrl = async () => {
+      const url = await getPdfUrl(props.params.chatId ?? '');
+      setPdfUrl(url);
+      setIsLoading(false);
+    };
+
+    fetchPdfUrl();
+  }, [props.params.chatId]);
 
   return (
     <div className="flex flex-row h-full pb-6 gap-6">
       {showPDF ? (
         <div className="hidden md:block w-full">
-          <PDFViewer chatId={props.params.chatId ?? ''} />
+          {isLoading ? (
+            <LoadingIcon className="h-12 w-12 text-brand-orange" />
+          ) : (
+            <PDFViewer pdfUrl={pdfUrl ?? ''} />
+          )}
         </div>
       ) : null}
       <div
