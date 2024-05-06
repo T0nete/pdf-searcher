@@ -1,4 +1,4 @@
-import { downloadFileFromBucket } from '../supabase/supabase';
+import { downloadFileFromBucket } from '../supabase/supabase-storage';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { Document } from 'langchain/document';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
