@@ -7,6 +7,7 @@ import UploadIcon from './icons/UploadIcon';
 import LoadingIcon from './icons/LoadingIcon';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -34,9 +35,12 @@ const FileUpload = () => {
           fileName: fileName,
         });
 
+        toast.success('File uploaded successfully!');
         router.push(`/chat/${res.data.chatId}`);
       } catch (error) {
         console.error(error);
+        toast.error('Error uploading file, please try again.');
+
         return;
       } finally {
         setIsLoading(false);

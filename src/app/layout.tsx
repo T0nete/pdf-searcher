@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
+
 import '@fontsource/dosis';
 import './globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} font-dosis container mx-auto`}>
+        <ToastContainer theme="dark" />
         {children}
       </body>
     </html>
