@@ -43,8 +43,11 @@ const FileUpload = () => {
         toast.success('File uploaded successfully!');
         router.push(`/chat/${res.data.chatId}`);
       } catch (error) {
-        console.error(error);
-        toast.error('Error uploading file, please try again.');
+        let errorMessage = 'An error occurred while uploading the file';
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        toast.error(errorMessage);
 
         return;
       } finally {
