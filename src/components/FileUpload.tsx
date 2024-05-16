@@ -25,6 +25,11 @@ const FileUpload = () => {
       setIsLoading(true);
 
       // Validate file size
+      if (acceptedFiles[0].size > 10 * 1024 * 1024) {
+        toast.error('File size is too large, please upload a file under 10MB.');
+        setIsLoading(false);
+        return;
+      }
       // Upload file to Supabase
       const file = acceptedFiles[0];
       const fileName = file.name.replace(/\s/g, '-');
