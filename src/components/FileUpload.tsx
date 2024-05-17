@@ -6,14 +6,11 @@ import { uploadFileToBucket } from '@/lib/supabase/supabase-storage';
 import UploadIcon from './icons/UploadIcon';
 import LoadingIcon from './icons/LoadingIcon';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [fileName, setFileName] = React.useState<string | null>(
-    'TFM_Grupo4_Entrega_Final (1).pdf'
-  );
   const router = useRouter();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -34,6 +31,24 @@ const FileUpload = () => {
       const file = acceptedFiles[0];
       const fileName = file.name.replace(/\s/g, '-');
       try {
+        // Validate if the user has already uploaded a file
+        const searchParams = encodeURIComponent(fileName);
+
+        const { data } = await axios.get(`/api/chat?fileName=${searchParams}`);
+
+        if (!data.success) {
+          toast.error(data.message);
+          return;
+        }
+
+        // In case of having a chat with the same file name for the user return the chatId
+
+        console.log(data);
+        if (data.chats.length > 0) {
+          router.push(`/chat/${data.chats[0].pdf_id}`);
+          return;
+        }
+
         await uploadFileToBucket(file, fileName);
 
         const res = await axios.post('/api/create-chat', {
@@ -44,11 +59,13 @@ const FileUpload = () => {
         router.push(`/chat/${res.data.chatId}`);
       } catch (error) {
         let errorMessage = 'An error occurred while uploading the file';
-        if (error instanceof Error) {
+        if (isAxiosError(error)) {
+          errorMessage = error.response?.data.message;
+        } else if (error instanceof Error) {
           errorMessage = error.message;
         }
-        toast.error(errorMessage);
 
+        toast.error(errorMessage);
         return;
       } finally {
         setIsLoading(false);

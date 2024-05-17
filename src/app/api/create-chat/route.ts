@@ -1,6 +1,7 @@
 import { uploadFileToPinecone } from '@/lib/pinecone/pinecone';
 import { supabaseClient } from '@/lib/supabase/supabase-client';
 import { getPublicUrl } from '@/lib/supabase/supabase-storage';
+import { createUpload } from '@/lib/supabase/supabase-upload';
 import { NextResponse } from 'next/server';
 
 export const POST = async (req: Request, res: Response) => {
@@ -16,6 +17,7 @@ export const POST = async (req: Request, res: Response) => {
     }
 
     await uploadFileToPinecone(fileName);
+
     const { data, error } = await supabaseClient
       .from('chat')
       .insert({
@@ -32,6 +34,12 @@ export const POST = async (req: Request, res: Response) => {
         { status: 500 }
       );
     }
+
+    // For unauthenticated users, we store the chat id in the upload table
+    const ip =
+      req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? '';
+
+    await createUpload(data[0].id, ip);
 
     return NextResponse.json({ chatId: data[0].id });
   } catch (error) {

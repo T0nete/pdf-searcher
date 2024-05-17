@@ -13,6 +13,9 @@ export const uploadFileToBucket = async (file: File, fileName: string) => {
   } catch (error) {
     console.error('Unexpected Error uploading file: ', error);
     let errorMessage = 'An error occurred while uploading the file';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
     throw new Error(errorMessage);
   }
 };
