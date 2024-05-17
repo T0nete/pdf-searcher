@@ -2,12 +2,17 @@
 
 import { cn } from '@/lib/utils';
 import { useChat } from 'ai/react';
+import axios from 'axios';
 
 interface ChatComponentProps {
+  fileName: string;
   className?: string;
 }
 const ChatComponent = (props: ChatComponentProps) => {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: '/api/chat',
+    body: { fileName: props.fileName },
+  });
 
   return (
     <div

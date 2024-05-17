@@ -5,8 +5,10 @@ import ChatComponent from '@/components/ChatComponent';
 import PDFViewer from '@/components/PDFViewer';
 import ArrowLeft from '@/components/icons/ArrowLeft';
 import ArrowRight from '@/components/icons/ArrowRight';
-import { getPdfUrl } from '@/lib/supabase/supabase-chats';
+import { getChatById } from '@/lib/supabase/supabase-chats';
 import LoadingIcon from '@/components/icons/LoadingIcon';
+import { toast } from 'react-toastify';
+import { Chat } from '@/../types/supabase';
 
 type Props = {
   params: {
@@ -16,18 +18,28 @@ type Props = {
 
 const ChatPage = (props: Props) => {
   const [showPDF, setShowPDF] = React.useState(true);
-  const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+  const [chatData, setChatData] = React.useState<Chat | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchPdfUrl = async () => {
-      const url = await getPdfUrl(props.params.chatId ?? '');
-      setPdfUrl(url);
+      const chatData = await getChatById(props.params.chatId ?? '');
+
+      if (!chatData) {
+        toast.error('Error getting chat data');
+        return;
+      }
+
+      setChatData(chatData.data);
       setIsLoading(false);
     };
 
     fetchPdfUrl();
   }, [props.params.chatId]);
+
+  if (!chatData) {
+    return null;
+  }
 
   return (
     <div className="flex flex-row h-full pb-6 gap-6">
@@ -36,7 +48,7 @@ const ChatPage = (props: Props) => {
           {isLoading ? (
             <LoadingIcon className="h-12 w-12 text-brand-orange" />
           ) : (
-            <PDFViewer pdfUrl={pdfUrl ?? ''} />
+            <PDFViewer pdfUrl={chatData?.pdf_url ?? ''} />
           )}
         </div>
       ) : null}
@@ -51,7 +63,10 @@ const ChatPage = (props: Props) => {
         >
           {showPDF ? <ArrowLeft className="" /> : <ArrowRight className="" />}
         </div>
-        <ChatComponent className="h-full" />
+        <ChatComponent
+          fileName={chatData.pdf_file_name ?? ''}
+          className="h-full"
+        />
       </div>
     </div>
   );

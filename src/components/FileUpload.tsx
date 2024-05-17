@@ -43,8 +43,7 @@ const FileUpload = () => {
 
         // In case of having a chat with the same file name for the user return the chatId
 
-        console.log(data);
-        if (data.chats.length > 0) {
+        if (data.chats?.length > 0) {
           router.push(`/chat/${data.chats[0].pdf_id}`);
           return;
         }

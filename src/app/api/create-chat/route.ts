@@ -1,4 +1,5 @@
 import { uploadFileToPinecone } from '@/lib/pinecone/pinecone';
+import { createChat } from '@/lib/supabase/supabase-chats';
 import { supabaseClient } from '@/lib/supabase/supabase-client';
 import { getPublicUrl } from '@/lib/supabase/supabase-storage';
 import { createUpload } from '@/lib/supabase/supabase-upload';
@@ -16,21 +17,17 @@ export const POST = async (req: Request, res: Response) => {
       );
     }
 
+    console.log('Uploading file to Pinecone');
     await uploadFileToPinecone(fileName);
 
-    const { data, error } = await supabaseClient
-      .from('chat')
-      .insert({
-        pdf_file_name: fileName,
-        pdf_url: getPublicUrl(fileName).data.publicUrl,
-        user_id: null,
-      })
-      .select('id');
+    console.log('Uploading file to Pinecone');
 
-    if (error || !data) {
-      console.error('Error creating chat: ', error);
+    const newChatId = await createChat(fileName);
+
+    if (!newChatId) {
+      console.error('Error creating chat: ', newChatId);
       return NextResponse.json(
-        { message: `Error creating chat: ${error?.message}` },
+        { message: 'Error creating chat' },
         { status: 500 }
       );
     }
@@ -39,9 +36,11 @@ export const POST = async (req: Request, res: Response) => {
     const ip =
       req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? '';
 
-    await createUpload(data[0].id, ip);
+    console.log('Uploading file to Pinecone');
 
-    return NextResponse.json({ chatId: data[0].id });
+    await createUpload(newChatId, ip);
+
+    return NextResponse.json({ chatId: newChatId });
   } catch (error) {
     console.error('Unexpected Error creating chat: ', error);
     return NextResponse.json(
