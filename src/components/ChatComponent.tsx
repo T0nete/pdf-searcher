@@ -3,15 +3,47 @@
 import { cn } from '@/lib/utils';
 import { useChat } from 'ai/react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { Messages } from '@/../types/supabase-databse';
 
 interface ChatComponentProps {
+  chatId: number;
   fileName: string;
   className?: string;
 }
 const ChatComponent = (props: ChatComponentProps) => {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const [initialMessages, setInitialMessages] = useState([]);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      const chatId = encodeURIComponent(props.chatId);
+      const { data } = await axios.get('/api/messages', { params: { chatId } });
+
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+      const formattedMessages = data.messages.map((m: Messages) => ({
+        id: m.id,
+        content: m.message,
+        role: m.sender === 'user' ? 'user' : 'assistant',
+      }));
+      setInitialMessages(formattedMessages);
+    };
+
+    fetchMessages();
+  }, [props.chatId]);
+
+  const {
+    messages: chatMessages,
+    input,
+    handleInputChange,
+    handleSubmit,
+  } = useChat({
     api: '/api/chat',
-    body: { fileName: props.fileName },
+    body: { chatId: props.chatId, fileName: props.fileName },
+    initialMessages,
   });
 
   return (
@@ -19,7 +51,7 @@ const ChatComponent = (props: ChatComponentProps) => {
       className={cn('flex flex-col  stretch justify-between', props.className)}
     >
       <div className="overflow-y-auto max-h-[85vh]">
-        {messages.map((m) => (
+        {chatMessages.map((m) => (
           <div
             key={m.id}
             className={`flex whitespace-pre-wrap mb-2 ${

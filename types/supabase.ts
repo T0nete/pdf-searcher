@@ -44,6 +44,38 @@ export type Database = {
           }
         ];
       };
+      messages: {
+        Row: {
+          chat_id: number | null;
+          created_at: string;
+          id: number;
+          message: string | null;
+          sender: string | null;
+        };
+        Insert: {
+          chat_id?: number | null;
+          created_at?: string;
+          id?: number;
+          message?: string | null;
+          sender?: string | null;
+        };
+        Update: {
+          chat_id?: number | null;
+          created_at?: string;
+          id?: number;
+          message?: string | null;
+          sender?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'messages_chat_id_fkey';
+            columns: ['chat_id'];
+            isOneToOne: false;
+            referencedRelation: 'chat';
+            referencedColumns: ['id'];
+          }
+        ];
+      };
       upload: {
         Row: {
           created_at: string;
@@ -188,5 +220,3 @@ export type Enums<
   : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
   ? PublicSchema['Enums'][PublicEnumNameOrOptions]
   : never;
-
-export type Chat = Database['public']['Tables']['chat']['Row'];

@@ -8,7 +8,7 @@ import ArrowRight from '@/components/icons/ArrowRight';
 import { getChatById } from '@/lib/supabase/supabase-chats';
 import LoadingIcon from '@/components/icons/LoadingIcon';
 import { toast } from 'react-toastify';
-import { Chat } from '@/../types/supabase';
+import { Chat } from '@/../types/supabase-databse';
 
 type Props = {
   params: {
@@ -64,6 +64,7 @@ const ChatPage = (props: Props) => {
           {showPDF ? <ArrowLeft className="" /> : <ArrowRight className="" />}
         </div>
         <ChatComponent
+          chatId={chatData.id}
           fileName={chatData.pdf_file_name ?? ''}
           className="h-full"
         />

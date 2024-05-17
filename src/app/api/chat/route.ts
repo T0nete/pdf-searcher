@@ -3,6 +3,12 @@ import { Message, OpenAIStream, StreamingTextResponse } from 'ai';
 import { getContext } from '@/lib/pinecone/pinecone-context';
 import { NextRequest, NextResponse } from 'next/server';
 import { getFileNameByIPAndFileName } from '@/lib/supabase/supabase-upload';
+import { TMessage, createChatMessage } from '@/lib/supabase/supabase-messages';
+import {
+  ParsedEvent,
+  ReconnectInterval,
+  createParser,
+} from 'eventsource-parser';
 
 // Create an OpenAI API client (that's edge friendly!)
 const openai = new OpenAI({
@@ -13,7 +19,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, fileName } = await req.json();
+    const { chatId, messages, fileName } = await req.json();
+    console.log(chatId, messages, fileName);
 
     const lastMessage = messages[messages.length - 1];
     const context = await getContext(lastMessage.content, fileName);
@@ -50,13 +57,50 @@ export async function POST(req: NextRequest) {
     });
 
     // Convert the response into a friendly text-stream
-    const stream = OpenAIStream(response);
+    const stream = OpenAIStream(response, {
+      onStart: async () => {
+        await createChatMessage([
+          {
+            chat_id: chatId,
+            sender: 'user',
+            message: lastMessage.content,
+          },
+        ]);
+      },
+      onCompletion: async (completion: string) => {
+        await createChatMessage([
+          { chat_id: chatId, sender: 'assistant', message: completion },
+        ]);
+      },
+    });
 
-    // Respond with the stream
     return new StreamingTextResponse(stream);
   } catch (error) {
     return NextResponse.error();
   }
+}
+async function processStream(
+  response: ReadableStream<Uint8Array>
+): Promise<string> {
+  const reader = response.getReader();
+  const decoder = new TextDecoder('utf-8');
+  let result = '';
+
+  const parser = createParser((event: ParsedEvent | ReconnectInterval) => {
+    if ('data' in event) {
+      result += event.data.replace(/^\d+:"|"/g, '');
+    }
+  });
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value, { stream: true });
+    parser.feed(chunk);
+  }
+
+  return result;
 }
 
 export async function GET(req: NextRequest) {
