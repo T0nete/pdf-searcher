@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          ip: string | null
           pdf_file_name: string | null
           pdf_url: string | null
           user_id: number | null
@@ -20,6 +21,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
+          ip?: string | null
           pdf_file_name?: string | null
           pdf_url?: string | null
           user_id?: number | null
@@ -27,6 +29,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: number
+          ip?: string | null
           pdf_file_name?: string | null
           pdf_url?: string | null
           user_id?: number | null
@@ -37,6 +40,35 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      upload: {
+        Row: {
+          created_at: string
+          id: number
+          ip_address: string
+          pdf_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          ip_address: string
+          pdf_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          ip_address?: string
+          pdf_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "upload_pdf_id_fkey"
+            columns: ["pdf_id"]
+            isOneToOne: false
+            referencedRelation: "chat"
             referencedColumns: ["id"]
           },
         ]
