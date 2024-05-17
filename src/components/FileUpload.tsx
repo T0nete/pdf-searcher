@@ -18,6 +18,7 @@ const FileUpload = () => {
       'aplication/pdf': ['.pdf'],
     },
     maxFiles: 1,
+    disabled: isLoading,
     onDrop: async (acceptedFiles) => {
       setIsLoading(true);
 
