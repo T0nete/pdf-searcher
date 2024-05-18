@@ -65,15 +65,13 @@ const ChatComponent = (props: ChatComponentProps) => {
           placeholder="Say something..."
           onChange={handleInputChange}
         />
-        <div className="block md:hidden">
-          <button
-            type="button"
-            className="bg-brand-orange hover:bg-brand-orange-hover transition-colors duration-200 rounded-full p-2"
-            onClick={props.handleShowPDF}
-          >
-            {props.showPDF ? <EyeHide /> : <EyeShow />}
-          </button>
-        </div>
+        <button
+          type="button"
+          className="bg-brand-orange hover:bg-brand-orange-hover transition-colors duration-200 rounded-full p-2"
+          onClick={props.handleShowPDF}
+        >
+          {props.showPDF ? <EyeHide /> : <EyeShow />}
+        </button>
         <button
           type="submit"
           className="bg-brand-orange hover:bg-brand-orange-hover transition-colors duration-200 rounded-full p-2"

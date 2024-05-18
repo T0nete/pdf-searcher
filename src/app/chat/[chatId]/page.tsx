@@ -60,16 +60,16 @@ const ChatPage = (props: Props) => {
   return (
     <div className="relative flex flex-col md:flex-row h-full pb-6 gap-6">
       {showPDF ? (
-        <div className="absolute bottom-6 right-0 md:hidden">
+        <div className="absolute bottom-6 right-0">
           <button
-            className="bg-brand-orange p-2 rounded-full hover:bg-brand-orange-hover duration-200  transition-colors"
+            className="bg-brand-orange p-2 rounded-full hover:bg-brand-orange-hover duration-200 transition-colors"
             onClick={handleShowPDF}
           >
             {showPDF ? <EyeHide /> : <EyeShow />}
           </button>
         </div>
       ) : null}
-      <div className={`w-full h-full ${showPDF ? 'block' : 'hidden'} md:block`}>
+      <div className={`w-full h-full ${showPDF ? 'block' : 'hidden md:block'}`}>
         {isLoading ? (
           <LoadingIcon className="h-12 w-12 text-brand-orange" />
         ) : (
@@ -78,7 +78,7 @@ const ChatPage = (props: Props) => {
       </div>
       <div
         className={` h-full w-full md:max-w-md mx-auto ${
-          showPDF ? 'hidden md:block' : ''
+          showPDF ? 'hidden ' : ''
         }`}
       >
         <ChatComponent
