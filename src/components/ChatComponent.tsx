@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Messages } from '@/../types/supabase-databse';
+import Submit from './icons/Submit';
+import MessageList from './MessageList';
 
 interface ChatComponentProps {
   chatId: number;
@@ -50,34 +52,20 @@ const ChatComponent = (props: ChatComponentProps) => {
     <div
       className={cn('flex flex-col  stretch justify-between', props.className)}
     >
-      <div className="overflow-y-auto max-h-[85vh]">
-        {chatMessages.map((m) => (
-          <div
-            key={m.id}
-            className={`flex whitespace-pre-wrap mb-2 ${
-              m.role === 'user' ? 'justify-end' : 'justify-start'
-            }`}
-          >
-            <p
-              className={`rounded-md py-2 px-4 ${
-                m.role === 'user'
-                  ? 'justify-end bg-brand-orange text-white'
-                  : 'text-start bg-light-gray'
-              }`}
-            >
-              {m.content}
-            </p>
-          </div>
-        ))}
+      <div className="my-2 overflow-y-auto max-h-[85vh]">
+        <MessageList chatMessages={chatMessages} />
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-row gap-2">
         <input
           className="w-full p-2 bg-dark-gray border border-light-gray rounded shadow-xl focus:border-brand-orange focus:outline-none"
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}
         />
+        <button type="submit" className="bg-brand-orange rounded-full p-2">
+          <Submit className="w-6 h-6" />
+        </button>
       </form>
     </div>
   );
