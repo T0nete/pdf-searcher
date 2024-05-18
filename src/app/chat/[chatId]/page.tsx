@@ -3,12 +3,12 @@
 import React from 'react';
 import ChatComponent from '@/components/ChatComponent';
 import PDFViewer from '@/components/PDFViewer';
-import ArrowLeft from '@/components/icons/ArrowLeft';
-import ArrowRight from '@/components/icons/ArrowRight';
 import { getChatById } from '@/lib/supabase/supabase-chats';
 import LoadingIcon from '@/components/icons/LoadingIcon';
 import { toast } from 'react-toastify';
 import { Chat } from '@/../types/supabase-databse';
+import EyeHide from '@/components/icons/EyeHide';
+import EyeShow from '@/components/icons/EyeShow';
 
 type Props = {
   params: {
@@ -20,6 +20,18 @@ const ChatPage = (props: Props) => {
   const [showPDF, setShowPDF] = React.useState(true);
   const [chatData, setChatData] = React.useState<Chat | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setShowPDF(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   React.useEffect(() => {
     const fetchPdfUrl = async () => {
@@ -41,32 +53,40 @@ const ChatPage = (props: Props) => {
     return null;
   }
 
+  const handleShowPDF = () => {
+    setShowPDF(!showPDF);
+  };
+
   return (
-    <div className="flex flex-row h-full pb-6 gap-6">
+    <div className="relative flex flex-col md:flex-row h-full pb-6 gap-6">
       {showPDF ? (
-        <div className="hidden md:block w-full">
-          {isLoading ? (
-            <LoadingIcon className="h-12 w-12 text-brand-orange" />
-          ) : (
-            <PDFViewer pdfUrl={chatData?.pdf_url ?? ''} />
-          )}
+        <div className="absolute bottom-6 right-12 md:hidden">
+          <button
+            className="bg-brand-orange p-2 rounded-full"
+            onClick={handleShowPDF}
+          >
+            {showPDF ? <EyeHide /> : <EyeShow />}
+          </button>
         </div>
       ) : null}
+      <div className={`w-full h-full ${showPDF ? 'block' : 'hidden'} md:block`}>
+        {isLoading ? (
+          <LoadingIcon className="h-12 w-12 text-brand-orange" />
+        ) : (
+          <PDFViewer pdfUrl={chatData?.pdf_url ?? ''} />
+        )}
+      </div>
       <div
-        className={`relative w-full h-full ${
-          !showPDF ? 'w-full' : 'max-w-md'
-        } mx-auto`}
+        className={` h-full w-full md:max-w-md mx-auto ${
+          showPDF ? 'hidden md:block' : ''
+        }`}
       >
-        <div
-          className="absolute top-1/2 left-0 ml-[-28px] hover:scale-125 hover:text-brand-orange transition-all duration-300 h-8 w-8 text-light-gray"
-          onClick={() => setShowPDF(!showPDF)}
-        >
-          {showPDF ? <ArrowLeft className="" /> : <ArrowRight className="" />}
-        </div>
         <ChatComponent
           chatId={chatData.id}
           fileName={chatData.pdf_file_name ?? ''}
           className="h-full"
+          showPDF={showPDF}
+          handleShowPDF={handleShowPDF}
         />
       </div>
     </div>

@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 type Props = {
   className?: string;
 };
@@ -10,7 +12,7 @@ function Submit(props: Props) {
       viewBox="0 0 24 24"
       strokeWidth="1.5"
       stroke="currentColor"
-      className={props.className}
+      className={cn('w-6 h-6', props.className)}
     >
       <path
         strokeLinecap="round"

@@ -6,13 +6,17 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Messages } from '@/../types/supabase-databse';
-import Submit from './icons/Submit';
 import MessageList from './MessageList';
+import Submit from '@/components/icons/Submit';
+import EyeHide from './icons/EyeHide';
+import EyeShow from './icons/EyeShow';
 
 interface ChatComponentProps {
   chatId: number;
   fileName: string;
   className?: string;
+  showPDF: boolean;
+  handleShowPDF: () => void;
 }
 const ChatComponent = (props: ChatComponentProps) => {
   const [initialMessages, setInitialMessages] = useState([]);
@@ -49,10 +53,8 @@ const ChatComponent = (props: ChatComponentProps) => {
   });
 
   return (
-    <div
-      className={cn('flex flex-col  stretch justify-between', props.className)}
-    >
-      <div className="my-2 overflow-y-auto max-h-[85vh]">
+    <div className={cn('flex flex-col stretch justify-end', props.className)}>
+      <div className={`"my-2 overflow-y-auto max-h-[85vh]`}>
         <MessageList chatMessages={chatMessages} />
       </div>
 
@@ -63,8 +65,17 @@ const ChatComponent = (props: ChatComponentProps) => {
           placeholder="Say something..."
           onChange={handleInputChange}
         />
+        <div className="block md:hidden">
+          <button
+            type="button"
+            className="bg-brand-orange rounded-full p-2"
+            onClick={props.handleShowPDF}
+          >
+            {props.showPDF ? <EyeHide /> : <EyeShow />}
+          </button>
+        </div>
         <button type="submit" className="bg-brand-orange rounded-full p-2">
-          <Submit className="w-6 h-6" />
+          <Submit />
         </button>
       </form>
     </div>
