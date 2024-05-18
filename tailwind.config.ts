@@ -18,9 +18,8 @@ const config: Config = {
       },
       colors: {
         'brand-orange': '#FF4F18',
+        'brand-orange-hover': '#FF7F50',
         dark: '#2c2c2c',
-        // dark: '#141517',
-        // 'light-gray': '#F2F4F7',
         'light-gray': '#3e3e3e',
         'dark-gray': '#333333',
       },

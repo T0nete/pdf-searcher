@@ -60,9 +60,9 @@ const ChatPage = (props: Props) => {
   return (
     <div className="relative flex flex-col md:flex-row h-full pb-6 gap-6">
       {showPDF ? (
-        <div className="absolute bottom-6 right-12 md:hidden">
+        <div className="absolute bottom-6 right-0 md:hidden">
           <button
-            className="bg-brand-orange p-2 rounded-full"
+            className="bg-brand-orange p-2 rounded-full hover:bg-brand-orange-hover duration-200  transition-colors"
             onClick={handleShowPDF}
           >
             {showPDF ? <EyeHide /> : <EyeShow />}
