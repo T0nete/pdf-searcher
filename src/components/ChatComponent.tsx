@@ -5,7 +5,7 @@ import { useChat } from 'ai/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Messages } from '@/../types/supabase-databse';
+import { Messages } from '@/types/supabase-databse';
 import MessageList from './MessageList';
 import Submit from '@/components/icons/Submit';
 import EyeHide from './icons/EyeHide';

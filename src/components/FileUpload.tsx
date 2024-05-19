@@ -45,10 +45,11 @@ const FileUpload = () => {
         // In case of having a chat with the same file name for the user return the chatId
 
         if (data.chats?.length > 0) {
-          router.push(`/chat/${data.chats[0].pdf_id}`);
+          router.push(`/chat/${data.chats[0].id}`);
           return;
         }
 
+        console.log('------');
         await uploadFileToBucket(file, fileName);
 
         const res = await axios.post('/api/create-chat', {

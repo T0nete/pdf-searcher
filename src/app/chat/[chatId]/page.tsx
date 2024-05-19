@@ -6,7 +6,7 @@ import PDFViewer from '@/components/PDFViewer';
 import { getChatById } from '@/lib/supabase/supabase-chats';
 import LoadingIcon from '@/components/icons/LoadingIcon';
 import { toast } from 'react-toastify';
-import { Chat } from '@/../types/supabase-databse';
+import { Chat } from '@/types/supabase-databse';
 import EyeHide from '@/components/icons/EyeHide';
 import EyeShow from '@/components/icons/EyeShow';
 

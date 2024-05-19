@@ -2,13 +2,17 @@ import OpenAI from 'openai';
 import { Message, OpenAIStream, StreamingTextResponse } from 'ai';
 import { getContext } from '@/lib/pinecone/pinecone-context';
 import { NextRequest, NextResponse } from 'next/server';
-import { getFileNameByIPAndFileName } from '@/lib/supabase/supabase-upload';
+import {
+  getChatByIPAndFileName,
+  getChatByUserIdAndFileName,
+} from '@/lib/supabase/supabase-upload';
 import { TMessage, createChatMessage } from '@/lib/supabase/supabase-messages';
 import {
   ParsedEvent,
   ReconnectInterval,
   createParser,
 } from 'eventsource-parser';
+import { createClient } from '@/lib/supabase/serverClient';
 
 // Create an OpenAI API client (that's edge friendly!)
 const openai = new OpenAI({
@@ -79,36 +83,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.error();
   }
 }
-async function processStream(
-  response: ReadableStream<Uint8Array>
-): Promise<string> {
-  const reader = response.getReader();
-  const decoder = new TextDecoder('utf-8');
-  let result = '';
-
-  const parser = createParser((event: ParsedEvent | ReconnectInterval) => {
-    if ('data' in event) {
-      result += event.data.replace(/^\d+:"|"/g, '');
-    }
-  });
-
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-
-    const chunk = decoder.decode(value, { stream: true });
-    parser.feed(chunk);
-  }
-
-  return result;
-}
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const { fileName } = Object.fromEntries(searchParams);
 
-    // TODO: Get the chat from the authenticated user
+    const user = await createClient().auth.getUser();
+
+    // Get the chat from the authenticated user
+    if (user.data.user) {
+      return authorizedUserChat(user.data.user.id, fileName);
+    }
 
     // Unauthorized users can only upload one file
     return unauthorizedUserChat(req, fileName);
@@ -117,11 +103,25 @@ export async function GET(req: NextRequest) {
   }
 }
 
+const authorizedUserChat = async (userId: string, fileName: string) => {
+  const chatData = await getChatByUserIdAndFileName(userId, fileName);
+  console.log('authorizedUserChat', chatData);
+
+  if (!chatData || chatData.length === 0) {
+    return NextResponse.json(
+      { success: true, message: 'No data found' },
+      { status: 200 }
+    );
+  }
+
+  return NextResponse.json({ success: true, chats: chatData }, { status: 200 });
+};
+
 const unauthorizedUserChat = async (req: NextRequest, fileName: string) => {
   const ip =
     req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? '';
 
-  const chatData = await getFileNameByIPAndFileName(ip);
+  const chatData = await getChatByIPAndFileName(ip);
   console.log(chatData);
 
   if (!chatData || chatData.length === 0) {
@@ -132,7 +132,7 @@ const unauthorizedUserChat = async (req: NextRequest, fileName: string) => {
   }
 
   // If the unauthorized user has already uploaded a file with the same name return the chat data, otherwise return error
-  if (chatData[0].chat?.pdf_file_name !== fileName) {
+  if (chatData[0].pdf_file_name !== fileName) {
     return NextResponse.json(
       {
         success: false,

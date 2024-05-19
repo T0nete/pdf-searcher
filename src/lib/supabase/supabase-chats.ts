@@ -1,17 +1,19 @@
-import { supabaseClient } from './supabase-client';
-import { getPublicUrl } from './supabase-storage';
+'use server';
+
+import { getPublicUrl } from '@/lib/supabase/supabase-storage';
+import { createClient } from './serverClient';
 
 export const getChatById = async (chatId: string) => {
-  return supabaseClient.from('chat').select('*').eq('id', chatId).single();
+  return createClient().from('chat').select('*').eq('id', chatId).single();
 };
 
-export const createChat = async (fileName: string) => {
-  const { data, error } = await supabaseClient
+export const createChat = async (fileName: string, userId?: string) => {
+  const { data, error } = await createClient()
     .from('chat')
     .insert({
       pdf_file_name: fileName,
       pdf_url: getPublicUrl(fileName).data.publicUrl,
-      user_id: null,
+      user_id: userId,
     })
     .select('id');
 
@@ -24,7 +26,7 @@ export const createChat = async (fileName: string) => {
 };
 
 export const getPdfUrl = async (chatId: string) => {
-  const { data, error } = await supabaseClient
+  const { data, error } = await createClient()
     .from('chat')
     .select('pdf_url')
     .eq('id', chatId)

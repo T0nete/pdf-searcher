@@ -1,13 +1,38 @@
-import { supabaseClient } from './supabase-client';
+'use server';
+
+import { createClient } from './serverClient';
 
 type UploadWithChat = {
-  pdf_id: number;
-  chat: {
-    pdf_file_name: string | null;
-  } | null;
+  id: number | null;
+  pdf_file_name: string | null;
 };
-export const getFileNameByIPAndFileName = async (ip: string) => {
-  const { data, error } = await supabaseClient
+export const getChatByUserIdAndFileName = async (
+  userId: string,
+  fileName: string
+) => {
+  const { data, error } = await createClient()
+    .from('chat')
+    .select(
+      `
+        id,
+        pdf_file_name
+        `
+    )
+    .eq('user_id', userId)
+    .eq('pdf_file_name', fileName);
+
+  console.log(data);
+  if (error || !data) {
+    console.error('Error getting chat: ', error);
+    return null;
+  }
+  console.log(data);
+
+  return data as UploadWithChat[];
+};
+
+export const getChatByIPAndFileName = async (ip: string) => {
+  const { data, error } = await createClient()
     .from('upload')
     .select(
       `
@@ -22,11 +47,16 @@ export const getFileNameByIPAndFileName = async (ip: string) => {
     return null;
   }
 
-  return data as UploadWithChat[];
+  return [
+    {
+      id: data[0].pdf_id,
+      pdf_file_name: data[0].chat?.pdf_file_name,
+    },
+  ] as UploadWithChat[];
 };
 
 export const createUpload = async (pdfId: number, ip: string) => {
-  return await supabaseClient.from('upload').insert({
+  return await createClient().from('upload').insert({
     pdf_id: pdfId,
     ip_address: ip,
   });

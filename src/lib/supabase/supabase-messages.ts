@@ -1,4 +1,6 @@
-import { supabaseClient } from './supabase-client';
+'use server';
+
+import { createClient } from './serverClient';
 
 export interface TMessage {
   chat_id: number;
@@ -8,7 +10,7 @@ export interface TMessage {
 type TSender = 'user' | 'assistant';
 
 export const createChatMessage = async (messages: TMessage[]) => {
-  const { data, error } = await supabaseClient
+  const { data, error } = await createClient()
     .from('messages')
     .insert(messages);
 
@@ -21,7 +23,7 @@ export const createChatMessage = async (messages: TMessage[]) => {
 };
 
 export const getChatMessages = async (chatId: number) => {
-  const { data, error } = await supabaseClient
+  const { data, error } = await createClient()
     .from('messages')
     .select('*')
     .eq('chat_id', chatId)
