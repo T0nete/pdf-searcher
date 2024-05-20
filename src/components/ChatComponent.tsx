@@ -58,7 +58,7 @@ const ChatComponent = (props: ChatComponentProps) => {
         <MessageList chatMessages={chatMessages} />
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-row gap-2">
+      <form onSubmit={handleSubmit} className="flex flex-row gap-2 mt-2">
         <input
           className="w-full p-2 bg-dark-gray border border-light-gray rounded shadow-xl focus:border-brand-orange focus:outline-none"
           value={input}
