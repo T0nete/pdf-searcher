@@ -1,14 +1,13 @@
 'use client';
 
 import React from 'react';
-import ChatComponent from '@/components/ChatComponent';
-import PDFViewer from '@/components/PDFViewer';
-import { getChatById } from '@/lib/supabase/supabase-chats';
-import LoadingIcon from '@/components/icons/LoadingIcon';
-import { toast } from 'react-toastify';
+import axios from 'axios';
+import ChatMainContent from '@/components/ChatMainContent';
+import BlurBackground from '@/components/DarkBackground';
+import Sidebar from '@/components/Sidebar';
 import { Chat } from '@/types/supabase-databse';
-import EyeHide from '@/components/icons/EyeHide';
-import EyeShow from '@/components/icons/EyeShow';
+import { toast } from 'react-toastify';
+import LoadingIcon from '@/components/icons/LoadingIcon';
 
 type Props = {
   params: {
@@ -17,79 +16,54 @@ type Props = {
 };
 
 const ChatPage = (props: Props) => {
-  const [showPDF, setShowPDF] = React.useState(true);
-  const [chatData, setChatData] = React.useState<Chat | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setShowPDF(false);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const [chatList, setChatList] = React.useState<Chat[]>([]);
+  const [chatData, setChatData] = React.useState<Chat | null>(null);
 
   React.useEffect(() => {
     const fetchPdfUrl = async () => {
-      const chatData = await getChatById(props.params.chatId ?? '');
+      setIsLoading(true);
+      const { data } = await axios.get(`/api/chats`);
+
+      if (!data || !data.success) {
+        toast.error('Error getting chat data');
+        return;
+      }
+
+      const chatData = data.data.find(
+        (chat: Chat) => chat.id === parseInt(props.params.chatId)
+      );
 
       if (!chatData) {
         toast.error('Error getting chat data');
         return;
       }
 
-      setChatData(chatData.data);
+      setChatData(chatData);
+      setChatList(data.data);
       setIsLoading(false);
     };
 
     fetchPdfUrl();
   }, [props.params.chatId]);
 
-  if (!chatData) {
-    return null;
-  }
-
-  const handleShowPDF = () => {
-    console.log('showPDF', showPDF);
-    setShowPDF(!showPDF);
-  };
-
   return (
-    <div className="relative flex flex-col md:flex-row h-full pb-6 gap-6">
-      {showPDF ? (
-        <div className="absolute bottom-6 right-0 md:hidden">
-          <button
-            className="bg-brand-orange p-2 rounded-full hover:bg-brand-orange-hover duration-200 transition-colors"
-            onClick={handleShowPDF}
-          >
-            {showPDF ? <EyeHide /> : <EyeShow />}
-          </button>
-        </div>
-      ) : null}
-      <div className={`w-full h-full ${showPDF ? 'block' : 'hidden '}`}>
+    <div className="flex flex-1 relative overflow-hidden gap-2">
+      <Sidebar currentChatId={props.params.chatId} chatList={chatList} />
+      <main className="flex-1 overflow-auto pt-4 md:px-0">
         {isLoading ? (
-          <LoadingIcon className="h-12 w-12 text-brand-orange" />
+          <div className="flex h-full justify-center items-center">
+            <LoadingIcon className="h-12 w-12 text-brand-orange" />
+          </div>
+        ) : !chatData ? (
+          <div className="flex h-full justify-center items-center">
+            <p className="text-white">No chat found</p>
+          </div>
         ) : (
-          <PDFViewer pdfUrl={chatData?.pdf_url ?? ''} />
+          <ChatMainContent chatData={chatData} />
         )}
-      </div>
-      <div
-        className={` h-full w-full ${
-          showPDF ? 'hidden md:block md:max-w-md' : 'md:w-3/4 md:max-w-3xl'
-        }  mx-auto `}
-      >
-        <ChatComponent
-          chatId={chatData.id}
-          fileName={chatData.pdf_file_name ?? ''}
-          className="h-full"
-          showPDF={showPDF}
-          handleShowPDF={handleShowPDF}
-        />
-      </div>
+      </main>
+      <BlurBackground />
     </div>
   );
 };

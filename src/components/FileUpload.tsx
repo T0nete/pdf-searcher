@@ -49,7 +49,6 @@ const FileUpload = () => {
           return;
         }
 
-        console.log('------');
         await uploadFileToBucket(file, fileName);
 
         const res = await axios.post('/api/create-chat', {

@@ -12,7 +12,6 @@ export async function login(formData: FormData) {
 
   const { data: userData, error } =
     await createClient().auth.signInWithPassword(data);
-  console.log(userData);
 
   if (error) {
     console.error(error);

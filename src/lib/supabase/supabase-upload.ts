@@ -21,12 +21,10 @@ export const getChatByUserIdAndFileName = async (
     .eq('user_id', userId)
     .eq('pdf_file_name', fileName);
 
-  console.log(data);
   if (error || !data) {
     console.error('Error getting chat: ', error);
     return null;
   }
-  console.log(data);
 
   return data as UploadWithChat[];
 };
@@ -36,7 +34,7 @@ export const getChatByIPAndFileName = async (ip: string) => {
     .from('upload')
     .select(
       `
-        pdf_id,
+        chat_id,
         chat:chat (pdf_file_name)
         `
     )
@@ -49,15 +47,15 @@ export const getChatByIPAndFileName = async (ip: string) => {
 
   return [
     {
-      id: data[0].pdf_id,
+      id: data[0].chat_id,
       pdf_file_name: data[0].chat?.pdf_file_name,
     },
   ] as UploadWithChat[];
 };
 
-export const createUpload = async (pdfId: number, ip: string) => {
+export const createUpload = async (chatId: number, ip: string) => {
   return await createClient().from('upload').insert({
-    pdf_id: pdfId,
+    chat_id: chatId,
     ip_address: ip,
   });
 };

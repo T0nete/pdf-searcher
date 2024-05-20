@@ -19,10 +19,16 @@ export const POST = async (req: Request, res: Response) => {
     console.log('Uploading file to Pinecone');
     await uploadFileToPinecone(fileName);
 
-    console.log('Creating chat in Supabase');
     const user = await createClient().auth.getUser();
+    const ip =
+      req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? '';
 
-    const newChatId = await createChat(fileName, user?.data.user?.id);
+    console.log('Creating chat in Supabase');
+    const newChatId = await createChat({
+      fileName,
+      userId: user?.data.user?.id,
+      ip,
+    });
 
     if (!newChatId) {
       console.error('Error creating chat: ', newChatId);
@@ -33,14 +39,8 @@ export const POST = async (req: Request, res: Response) => {
     }
 
     // For unauthenticated users, we store the chat id in the upload table
-    if (!user?.data) {
-      const ip =
-        req.headers.get('x-real-ip') ??
-        req.headers.get('x-forwarded-for') ??
-        '';
-
-      console.log('Uploading file to Pinecone');
-
+    if (!user?.data || !user?.data.user) {
+      console.log('Creating upload for unauthenticated user');
       await createUpload(newChatId, ip);
     }
 

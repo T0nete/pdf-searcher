@@ -27,7 +27,6 @@ export const getMatchesFromEmbeddings = async (
 };
 
 export const getContext = async (message: string, fileName: string) => {
-  console.log('Get context: ', message, fileName);
   const queryEmbeddings = await getEmbeddings(message);
 
   const matches = await getMatchesFromEmbeddings(fileName, queryEmbeddings);

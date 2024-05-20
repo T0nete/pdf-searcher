@@ -1,13 +1,16 @@
+import React from 'react';
 import Link from 'next/link';
 import Menu from '@/components/icons/Menu';
 import { cn } from '@/lib/utils';
+import { SidebarContext } from '@/providers/SidebarProvider';
 
 type HeaderProps = {
   className?: string;
-  toggleSidebar: () => void;
 };
 
 const Header = (props: HeaderProps) => {
+  const { toggleSidebar } = React.useContext(SidebarContext);
+
   return (
     <header
       className={cn(
@@ -17,13 +20,13 @@ const Header = (props: HeaderProps) => {
     >
       <button
         className="bg-brand-orange p-1 rounded-md hover:bg-brand-orange-hover duration-200 transition-colors"
-        onClick={props.toggleSidebar}
+        onClick={toggleSidebar}
       >
         <Menu />
       </button>
       <Link
         href="/"
-        className="text-3xl text-brand-orange font-bold px-4 md:px0"
+        className="text-3xl text-brand-orange font-bold px-4 md:px0 text-center"
       >
         PDF Searcher
       </Link>

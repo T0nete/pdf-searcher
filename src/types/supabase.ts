@@ -78,50 +78,32 @@ export type Database = {
       }
       upload: {
         Row: {
+          chat_id: number | null
           created_at: string
           id: number
           ip_address: string
-          pdf_id: number | null
         }
         Insert: {
+          chat_id?: number | null
           created_at?: string
           id?: number
           ip_address: string
-          pdf_id?: number | null
         }
         Update: {
+          chat_id?: number | null
           created_at?: string
           id?: number
           ip_address?: string
-          pdf_id?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "upload_pdf_id_fkey"
-            columns: ["pdf_id"]
+            foreignKeyName: "upload_chat_id_fkey"
+            columns: ["chat_id"]
             isOneToOne: false
             referencedRelation: "chat"
             referencedColumns: ["id"]
           },
         ]
-      }
-      users: {
-        Row: {
-          created_at: string
-          id: number
-          name: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          name?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          name?: string | null
-        }
-        Relationships: []
       }
     }
     Views: {

@@ -24,7 +24,6 @@ export const dynamic = 'force-dynamic';
 export async function POST(req: NextRequest) {
   try {
     const { chatId, messages, fileName } = await req.json();
-    console.log(chatId, messages, fileName);
 
     const lastMessage = messages[messages.length - 1];
     const context = await getContext(lastMessage.content, fileName);
@@ -105,7 +104,6 @@ export async function GET(req: NextRequest) {
 
 const authorizedUserChat = async (userId: string, fileName: string) => {
   const chatData = await getChatByUserIdAndFileName(userId, fileName);
-  console.log('authorizedUserChat', chatData);
 
   if (!chatData || chatData.length === 0) {
     return NextResponse.json(
@@ -122,7 +120,6 @@ const unauthorizedUserChat = async (req: NextRequest, fileName: string) => {
     req.headers.get('x-real-ip') ?? req.headers.get('x-forwarded-for') ?? '';
 
   const chatData = await getChatByIPAndFileName(ip);
-  console.log(chatData);
 
   if (!chatData || chatData.length === 0) {
     return NextResponse.json(
