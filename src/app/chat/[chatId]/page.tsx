@@ -54,6 +54,7 @@ const ChatPage = (props: Props) => {
   }
 
   const handleShowPDF = () => {
+    console.log('showPDF', showPDF);
     setShowPDF(!showPDF);
   };
 
@@ -78,7 +79,7 @@ const ChatPage = (props: Props) => {
       </div>
       <div
         className={` h-full w-full ${
-          showPDF ? 'md:max-w-md' : 'md:w-3/4 md:max-w-3xl'
+          showPDF ? 'hidden md:block md:max-w-md' : 'md:w-3/4 md:max-w-3xl'
         }  mx-auto `}
       >
         <ChatComponent

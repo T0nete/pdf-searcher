@@ -42,7 +42,7 @@ export const getChatByIPAndFileName = async (ip: string) => {
     )
     .eq('ip_address', ip);
 
-  if (error || !data) {
+  if (error || !data || data.length === 0) {
     console.error('Error getting chat: ', error);
     return null;
   }
