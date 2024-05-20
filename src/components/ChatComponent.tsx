@@ -54,7 +54,7 @@ const ChatComponent = (props: ChatComponentProps) => {
 
   return (
     <div className={cn('flex flex-col stretch justify-end', props.className)}>
-      <div className={`"my-2 overflow-y-auto max-h-[85vh]`}>
+      <div className={`"my-2 overflow-y-auto`}>
         <MessageList chatMessages={chatMessages} />
       </div>
 

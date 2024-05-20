@@ -21,9 +21,9 @@ export default function ChatLayout({
   };
 
   return (
-    <div className="flex flex-col h-full px-4 relative">
+    <div className="flex flex-col h-screen px-4">
       <Header toggleSidebar={toggleSidebar} />
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative overflow-hidden">
         {isSidebarOpen ? (
           <aside
             className={`fixed top-0 left-0 h-full bg-dark w-64 z-30 md:relative md:flex transform transition-transform ${
