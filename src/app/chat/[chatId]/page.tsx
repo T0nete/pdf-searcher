@@ -1,13 +1,13 @@
-'use client';
+// 'use client';
 
 import React from 'react';
-import axios from 'axios';
 import ChatMainContent from '@/components/ChatMainContent';
 import BlurBackground from '@/components/DarkBackground';
-import Sidebar from '@/components/Sidebar';
+import { getChatsByIp, getChatsByUserId } from '@/lib/supabase/supabase-chats';
+import { headers } from 'next/headers';
+import { createClient } from '@/lib/supabase/serverClient';
 import { Chat } from '@/types/supabase-databse';
-import { toast } from 'react-toastify';
-import LoadingIcon from '@/components/icons/LoadingIcon';
+import Sidebar from '@/components/Sidebar';
 
 type Props = {
   params: {
@@ -15,43 +15,34 @@ type Props = {
   };
 };
 
-const ChatPage = (props: Props) => {
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [chatList, setChatList] = React.useState<Chat[]>([]);
-  const [chatData, setChatData] = React.useState<Chat | null>(null);
+const ChatPage = async (props: Props) => {
+  const user = await createClient().auth.getUser();
+  let _chatList: Chat[] | null = null;
 
-  React.useEffect(() => {
-    const fetchPdfUrl = async () => {
-      setIsLoading(true);
-      const { data } = await axios.get(`/api/chats`);
+  if (user.data?.user?.id) {
+    _chatList = await getChatsByUserId(user.data.user?.id);
+  } else {
+    const ip =
+      headers().get('x-real-ip') ||
+      headers().get('x-forwarded-for') ||
+      headers().get('x-real-ip');
 
-      if (!data || !data.success) {
-        toast.error('Error getting chat data');
-        return;
-      }
+    if (!ip) {
+      console.error('Error getting ip');
+      return null;
+    }
+    _chatList = await getChatsByIp(ip);
+  }
 
-      const chatData = data.data.find(
-        (chat: Chat) => chat.id === parseInt(props.params.chatId)
-      );
-
-      if (!chatData) {
-        toast.error('Error getting chat data');
-        return;
-      }
-
-      setChatData(chatData);
-      setChatList(data.data);
-      setIsLoading(false);
-    };
-
-    fetchPdfUrl();
-  }, [props.params.chatId]);
+  const _chatData = _chatList?.find(
+    (chat) => chat.id === parseInt(props.params.chatId)
+  );
 
   return (
     <div className="flex flex-1 relative overflow-hidden gap-2">
-      <Sidebar currentChatId={props.params.chatId} chatList={chatList} />
+      <Sidebar chatList={_chatList} currentChatId={props.params.chatId} />
       <main className="flex-1 overflow-auto pt-4 md:px-0">
-        {isLoading ? (
+        {/* {isLoading ? (
           <div className="flex h-full justify-center items-center">
             <LoadingIcon className="h-12 w-12 text-brand-orange" />
           </div>
@@ -61,6 +52,13 @@ const ChatPage = (props: Props) => {
           </div>
         ) : (
           <ChatMainContent chatData={chatData} />
+        )} */}
+        {_chatData ? (
+          <ChatMainContent chatData={_chatData} />
+        ) : (
+          <div className="flex h-full justify-center items-center">
+            <p className="text-white">No chat found</p>
+          </div>
         )}
       </main>
       <BlurBackground />

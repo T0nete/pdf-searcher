@@ -11,7 +11,7 @@ type Props = {
   chatData: Chat;
 };
 const ChatMainContent = (props: Props) => {
-  const [showPDF, setShowPDF] = React.useState(true);
+  const [showPDF, setShowPDF] = React.useState(false);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -26,7 +26,7 @@ const ChatMainContent = (props: Props) => {
   }, []);
 
   const handleShowPDF = () => {
-    setShowPDF(!showPDF);
+    setShowPDF((prev) => !prev);
   };
 
   return (

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 export const SidebarContext = React.createContext({
@@ -8,7 +10,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const LayoutProvider = (props: Props) => {
+const SidebarProvider = (props: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const toggleSidebar = () => {
@@ -22,4 +24,4 @@ const LayoutProvider = (props: Props) => {
   );
 };
 
-export default LayoutProvider;
+export default SidebarProvider;

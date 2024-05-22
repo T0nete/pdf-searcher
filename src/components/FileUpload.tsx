@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { useDropzone } from 'react-dropzone';
-import { uploadFileToBucket } from '@/lib/supabase/supabase-storage';
-import UploadIcon from './icons/UploadIcon';
-import LoadingIcon from './icons/LoadingIcon';
-import { useRouter } from 'next/navigation';
 import axios, { isAxiosError } from 'axios';
+import { useRouter } from 'next/navigation';
+import { useDropzone } from 'react-dropzone';
 import { toast } from 'react-toastify';
+import { uploadFileToBucket } from '@/lib/supabase/supabase-storage';
+import UploadIcon from '@/components/icons/UploadIcon';
+import LoadingIcon from '@/components/icons/LoadingIcon';
 
 const FileUpload = () => {
   const [isLoading, setIsLoading] = React.useState(false);

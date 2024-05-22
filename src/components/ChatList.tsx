@@ -1,5 +1,9 @@
-import { Chat } from '@/types/supabase-databse';
+'use client';
+
 import React from 'react';
+import Link from 'next/link';
+import { SidebarContext } from '@/providers/SidebarProvider';
+import { Chat } from '@/types/supabase-databse';
 
 type Props = {
   currentChatId: string;
@@ -7,23 +11,36 @@ type Props = {
 };
 
 const ChatList = (props: Props) => {
+  const { toggleSidebar } = React.useContext(SidebarContext);
+  const getChatTitle = (fileName: string | null, chatId: number) => {
+    if (!fileName) return `Chat_${chatId}`;
+    const fileNameArray = fileName.split('.pdf');
+    return fileNameArray[0];
+  };
+
   return (
     <div className="flex flex-col w-full h-full bg-dark-gray">
-      {props.chatList.map((chat) => (
-        <div
-          key={chat.id}
-          className={`flex items-center justify-between p-3 cursor-pointer ${
-            props.currentChatId === chat.id.toString() ? 'bg-dark-300' : ''
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <div className="w-12 h-12 bg-dark-200 rounded-full"></div>
-            <div>
-              <p className="text-sm font-semibold">Title</p>
-            </div>
-          </div>
-        </div>
-      ))}
+      <ul className="p-2">
+        {props.chatList.map((chat) => (
+          <li
+            key={chat.id}
+            className={`flex items-center justify-start first:p-0 pt-1 cursor-pointer 
+      }`}
+          >
+            <Link
+              href={`/chat/${chat.id}`}
+              className={`flex items-center bg p-2 rounded-md w-full ${
+                props.currentChatId === chat.id.toString()
+                  ? 'bg-brand-orange-hover'
+                  : 'hover:bg-brand-orange-hover'
+              }`}
+              onClick={toggleSidebar}
+            >
+              <div>{getChatTitle(chat.pdf_file_name, chat.id)}</div>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

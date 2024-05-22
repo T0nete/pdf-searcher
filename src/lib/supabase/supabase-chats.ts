@@ -5,7 +5,18 @@ import { createClient } from './serverClient';
 import { Chat } from '@/types/supabase-databse';
 
 export const getChatById = async (chatId: string) => {
-  return createClient().from('chat').select('*').eq('id', chatId).single();
+  const { data, error } = await createClient()
+    .from('chat')
+    .select('*')
+    .eq('id', chatId)
+    .single();
+
+  if (error || !data) {
+    console.error('Error getting chat: ', error);
+    return null;
+  }
+
+  return data as Chat;
 };
 
 export const getChatsByIp = async (ip: string) => {

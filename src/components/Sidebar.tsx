@@ -1,15 +1,17 @@
-import { SidebarContext } from '@/providers/SidebarProvider';
+'use client';
+
 import React from 'react';
-import ChatList from './ChatList';
-import { Chat } from '@/types/supabase-databse';
+import { SidebarContext } from '@/providers/SidebarProvider';
+import ChatList from '@/components/ChatList';
+import Menu from './icons/Menu';
 
 type Props = {
   currentChatId: string;
-  chatList: Chat[];
+  chatList: any;
 };
 
 const Sidebar = (props: Props) => {
-  const { isSidebarOpen } = React.useContext(SidebarContext);
+  const { isSidebarOpen, toggleSidebar } = React.useContext(SidebarContext);
 
   if (!isSidebarOpen) return null;
 
@@ -19,6 +21,14 @@ const Sidebar = (props: Props) => {
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}
     >
+      <div className="h-16 flex flex-row items-center px-4 md:hidden">
+        <button
+          className="bg-brand-orange p-1 rounded-md hover:bg-brand-orange-hover duration-200 transition-colors"
+          onClick={toggleSidebar}
+        >
+          <Menu />
+        </button>
+      </div>
       <ChatList currentChatId={props.currentChatId} chatList={props.chatList} />
     </aside>
   );
