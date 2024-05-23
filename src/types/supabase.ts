@@ -15,6 +15,7 @@ export type Database = {
           id: number
           ip: string | null
           pdf_file_name: string | null
+          pdf_key: string | null
           pdf_url: string | null
           user_id: string | null
         }
@@ -23,6 +24,7 @@ export type Database = {
           id?: number
           ip?: string | null
           pdf_file_name?: string | null
+          pdf_key?: string | null
           pdf_url?: string | null
           user_id?: string | null
         }
@@ -31,6 +33,7 @@ export type Database = {
           id?: number
           ip?: string | null
           pdf_file_name?: string | null
+          pdf_key?: string | null
           pdf_url?: string | null
           user_id?: string | null
         }
