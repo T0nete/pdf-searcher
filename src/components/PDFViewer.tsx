@@ -11,6 +11,7 @@ const PDFViewer = (props: PDFViewerProps) => {
 
   return (
     <iframe
+      key={props.pdfUrl}
       src={`https://docs.google.com/gview?url=${props.pdfUrl}&embedded=true`}
       width="100%"
       height="100%"
