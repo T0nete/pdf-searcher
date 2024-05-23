@@ -14,7 +14,7 @@ const Header = (props: HeaderProps) => {
   return (
     <header
       className={cn(
-        'h-16 flex flex-row items-center border-b-2 border-b-dark-gray',
+        'h-16 flex flex-row items-center border-b-2 border-b-dark-gray gap-4',
         props.className
       )}
     >
@@ -26,7 +26,7 @@ const Header = (props: HeaderProps) => {
       </button>
       <Link
         href="/"
-        className="text-3xl text-brand-orange font-bold px-4 md:px0 text-center"
+        className="text-3xl text-brand-orange font-bold md:px0 text-center"
       >
         PDF Searcher
       </Link>
