@@ -11,7 +11,7 @@ type Props = {
   chatData: Chat;
 };
 const ChatMainContent = (props: Props) => {
-  const [showPDF, setShowPDF] = React.useState(false);
+  const [showPDF, setShowPDF] = React.useState(window.innerWidth > 768);
 
   React.useEffect(() => {
     const handleResize = () => {

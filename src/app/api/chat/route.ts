@@ -6,12 +6,7 @@ import {
   getChatByIPAndFileName,
   getChatByUserIdAndFileName,
 } from '@/lib/supabase/supabase-upload';
-import { TMessage, createChatMessage } from '@/lib/supabase/supabase-messages';
-import {
-  ParsedEvent,
-  ReconnectInterval,
-  createParser,
-} from 'eventsource-parser';
+import { createChatMessage } from '@/lib/supabase/supabase-messages';
 import { createClient } from '@/lib/supabase/serverClient';
 
 // Create an OpenAI API client (that's edge friendly!)
@@ -90,6 +85,7 @@ export async function GET(req: NextRequest) {
 
     const user = await createClient().auth.getUser();
 
+    console.log('user', user.data.user);
     // Get the chat from the authenticated user
     if (user.data.user) {
       return authorizedUserChat(user.data.user.id, fileName);
@@ -132,11 +128,12 @@ const unauthorizedUserChat = async (req: NextRequest, fileName: string) => {
   if (chatData[0].pdf_file_name !== fileName) {
     return NextResponse.json(
       {
-        success: false,
+        success: true,
         message:
           'Limited of files reached, please if you want to upload more files signup in the platform',
+        chats: chatData,
       },
-      { status: 403 }
+      { status: 200 }
     );
   }
 

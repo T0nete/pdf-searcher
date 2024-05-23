@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 export const POST = async (req: Request, res: Response) => {
   try {
     const body = await req.json();
-    const { fileName } = body as { fileName: string };
+    const { fileName, fileKey } = body as { fileName: string; fileKey: string };
 
     if (!fileName) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export const POST = async (req: Request, res: Response) => {
     }
 
     console.log('Uploading file to Pinecone');
-    await uploadFileToPinecone(fileName);
+    await uploadFileToPinecone(fileKey);
 
     const user = await createClient().auth.getUser();
     const ip =
@@ -28,6 +28,7 @@ export const POST = async (req: Request, res: Response) => {
       fileName,
       userId: user?.data.user?.id,
       ip,
+      fileKey,
     });
 
     if (!newChatId) {

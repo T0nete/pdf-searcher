@@ -1,6 +1,6 @@
+import React from 'react';
 import FileUpload from '@/components/FileUpload';
 import Hero from '@/components/Hero';
-import React from 'react';
 
 export default function Home() {
   return (

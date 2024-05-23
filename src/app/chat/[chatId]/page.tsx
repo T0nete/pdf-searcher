@@ -42,17 +42,6 @@ const ChatPage = async (props: Props) => {
     <div className="flex flex-1 relative overflow-hidden gap-2">
       <Sidebar chatList={_chatList} currentChatId={props.params.chatId} />
       <main className="flex-1 overflow-auto pt-4 md:px-0">
-        {/* {isLoading ? (
-          <div className="flex h-full justify-center items-center">
-            <LoadingIcon className="h-12 w-12 text-brand-orange" />
-          </div>
-        ) : !chatData ? (
-          <div className="flex h-full justify-center items-center">
-            <p className="text-white">No chat found</p>
-          </div>
-        ) : (
-          <ChatMainContent chatData={chatData} />
-        )} */}
         {_chatData ? (
           <ChatMainContent chatData={_chatData} />
         ) : (

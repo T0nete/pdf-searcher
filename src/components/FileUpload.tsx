@@ -31,10 +31,11 @@ const FileUpload = () => {
       // Upload file to Supabase
       const file = acceptedFiles[0];
       const fileName = file.name.replace(/\s/g, '-');
+      const timestamp = new Date().getTime();
+      const fileKey = `${timestamp}-${fileName}`;
       try {
         // Validate if the user has already uploaded a file
         const searchParams = encodeURIComponent(fileName);
-
         const { data } = await axios.get(`/api/chat?fileName=${searchParams}`);
 
         if (!data.success) {
@@ -45,14 +46,18 @@ const FileUpload = () => {
         // In case of having a chat with the same file name for the user return the chatId
 
         if (data.chats?.length > 0) {
+          if (data.message) {
+            toast.warn(data.message);
+          }
           router.push(`/chat/${data.chats[0].id}`);
           return;
         }
 
-        await uploadFileToBucket(file, fileName);
+        await uploadFileToBucket(file, fileKey);
 
         const res = await axios.post('/api/create-chat', {
           fileName: fileName,
+          fileKey: fileKey,
         });
 
         toast.success('File uploaded successfully!');

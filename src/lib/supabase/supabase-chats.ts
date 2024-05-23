@@ -54,6 +54,7 @@ export const getChatsByUserId = async (userId: string) => {
 
 interface ICreateChat {
   fileName: string;
+  fileKey: string;
   userId?: string;
   ip?: string;
 }
@@ -62,9 +63,10 @@ export const createChat = async (chatData: ICreateChat) => {
     .from('chat')
     .insert({
       pdf_file_name: chatData.fileName,
-      pdf_url: getPublicUrl(chatData.fileName).data.publicUrl,
+      pdf_url: getPublicUrl(chatData.fileKey).data.publicUrl,
       user_id: chatData.userId,
       ip: chatData.ip,
+      pdf_key: chatData.fileKey,
     })
     .select('id');
 
