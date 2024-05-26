@@ -52,9 +52,17 @@ const ChatComponent = (props: ChatComponentProps) => {
     initialMessages,
   });
 
+  useEffect(() => {
+    const messageContainer = document.getElementById('messageContainer');
+    if (messageContainer) {
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+      messageContainer.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages]);
+
   return (
     <div className={cn('flex flex-col stretch justify-end', props.className)}>
-      <div className={`"my-2 overflow-y-auto`}>
+      <div id="messageContainer" className={`"my-2 overflow-y-auto`}>
         <MessageList chatMessages={chatMessages} />
       </div>
 
