@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import '@fontsource/dosis';
 import './globals.css';
 import 'react-toastify/dist/ReactToastify.css';
+import Providers from '@/providers/providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} font-dosis container mx-auto h-dvh`}>
         <ToastContainer theme="dark" />
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

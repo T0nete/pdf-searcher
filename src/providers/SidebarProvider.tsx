@@ -11,9 +11,11 @@ type Props = {
 };
 
 const SidebarProvider = (props: Props) => {
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState<boolean>(() =>
-    JSON.parse(localStorage.getItem('isSidebarOpen') || 'false')
-  );
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState<boolean>(() => {
+    return false;
+    // if (typeof window === 'undefined') return false;
+    // return JSON.parse(localStorage.getItem('isSidebarOpen') || 'false');
+  });
 
   React.useEffect(() => {
     localStorage.setItem('isSidebarOpen', JSON.stringify(isSidebarOpen));
