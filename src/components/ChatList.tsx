@@ -19,8 +19,8 @@ const ChatList = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full bg-dark-gray">
-      <ul className="p-2">
+    <div>
+      <ul>
         {props.chatList.map((chat) => (
           <li
             key={chat.id}

@@ -1,9 +1,13 @@
 'use client';
 
 import React from 'react';
+import { User } from '@supabase/supabase-js';
 import { SidebarContext } from '@/providers/SidebarProvider';
 import ChatList from '@/components/ChatList';
-import Menu from './icons/Menu';
+import Menu from '@/components/icons/Menu';
+import Logoutbutton from '@/components/GoogleButtons/LogoutButton';
+import LoginButton from '@/components/GoogleButtons/LoginButton';
+import { supabaseClient } from '@/lib/supabase/browserClient';
 
 type Props = {
   currentChatId: string;
@@ -13,6 +17,15 @@ type Props = {
 const Sidebar = (props: Props) => {
   const { isSidebarOpen, toggleSidebar } = React.useContext(SidebarContext);
 
+  const [user, setUser] = React.useState<User | null>(null);
+  React.useEffect(() => {
+    const fetchUserData = async () => {
+      const user = await supabaseClient.auth.getUser();
+      setUser(user.data?.user);
+    };
+
+    fetchUserData();
+  }, [setUser]);
   if (!isSidebarOpen) return null;
 
   return (
@@ -29,7 +42,17 @@ const Sidebar = (props: Props) => {
           <Menu />
         </button>
       </div>
-      <ChatList currentChatId={props.currentChatId} chatList={props.chatList} />
+      <div className="flex flex-col w-full h-full bg-dark-gray justify-between p-2">
+        <ChatList
+          currentChatId={props.currentChatId}
+          chatList={props.chatList}
+        />
+        {user ? (
+          <Logoutbutton />
+        ) : (
+          <LoginButton currentChatId={props.currentChatId} />
+        )}
+      </div>
     </aside>
   );
 };

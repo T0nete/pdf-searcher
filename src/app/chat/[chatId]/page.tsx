@@ -1,5 +1,3 @@
-// 'use client';
-
 import React from 'react';
 import ChatMainContent from '@/components/ChatMainContent';
 import BlurBackground from '@/components/DarkBackground';

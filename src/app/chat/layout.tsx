@@ -1,8 +1,7 @@
 'use client';
 
-import Header from '@/components/Header';
-import SidebarProvider from '@/providers/SidebarProvider';
 import React from 'react';
+import Header from '@/components/Header';
 
 export default function ChatLayout({
   children,
@@ -10,11 +9,9 @@ export default function ChatLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
-      <div className="flex flex-col h-dvh px-4">
-        <Header />
-        {children}
-      </div>
-    </SidebarProvider>
+    <div className="flex flex-col h-dvh px-4">
+      <Header />
+      {children}
+    </div>
   );
 }
