@@ -11,7 +11,13 @@ type Props = {
 };
 
 const SidebarProvider = (props: Props) => {
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState<boolean>(() =>
+    JSON.parse(localStorage.getItem('isSidebarOpen') || 'false')
+  );
+
+  React.useEffect(() => {
+    localStorage.setItem('isSidebarOpen', JSON.stringify(isSidebarOpen));
+  }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
