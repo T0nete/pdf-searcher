@@ -92,3 +92,20 @@ export const getPdfUrl = async (chatId: string) => {
 
   return data.pdf_url;
 };
+
+export const updateChatWithUserIdById = async (
+  chatId: string,
+  userId: string
+) => {
+  const { error } = await createClient()
+    .from('chat')
+    .update({ user_id: userId })
+    .eq('id', chatId);
+
+  if (error) {
+    console.error('Error updating chat with user_id: ', error);
+    return null;
+  }
+
+  return true;
+};
