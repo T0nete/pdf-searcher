@@ -1,11 +1,10 @@
 import React from 'react';
-import ChatMainContent from '@/components/ChatMainContent';
 import BlurBackground from '@/components/DarkBackground';
 import { getChatsByIp, getChatsByUserId } from '@/lib/supabase/supabase-chats';
 import { headers } from 'next/headers';
 import { createClient } from '@/lib/supabase/serverClient';
 import { Chat } from '@/types/supabase-databse';
-import Sidebar from '@/components/Sidebar';
+import MainContentWrapper from '@/components/MainContentWrapper';
 
 type Props = {
   params: {
@@ -37,9 +36,9 @@ const ChatPage = async (props: Props) => {
   );
 
   return (
-    <div className="flex flex-1 relative overflow-hidden gap-2">
-      <Sidebar chatList={_chatList} currentChatId={props.params.chatId} />
-      <main className="flex-1 overflow-auto pt-4 md:px-0">
+    <div className="flex flex-1 h-full relative overflow-hidden gap-2">
+      {/* <Sidebar chatList={_chatList} currentChatId={props.params.chatId} /> */}
+      {/* <main className="flex-1 overflow-auto pt-4 md:px-0">
         {_chatData ? (
           <ChatMainContent chatData={_chatData} />
         ) : (
@@ -47,7 +46,12 @@ const ChatPage = async (props: Props) => {
             <p className="text-white">No chat found</p>
           </div>
         )}
-      </main>
+      </main> */}
+      <MainContentWrapper
+        chatList={_chatList}
+        chatData={_chatData}
+        currentChatId={props.params.chatId}
+      />
       <BlurBackground />
     </div>
   );

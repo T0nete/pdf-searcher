@@ -26,13 +26,12 @@ const Sidebar = (props: Props) => {
 
     fetchUserData();
   }, [setUser]);
-  if (!isSidebarOpen) return null;
 
   return (
     <aside
-      className={`fixed top-0 left-0 h-full bg-dark w-64 z-30 md:relative md:flex transform transition-transform ${
-        isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-      }`}
+      className={`fixed top-0 left-0 z-30 w-64 h-full bg-dark transition-transform duration-300 ease-in-out ${
+        isSidebarOpen ? 'translate-x-0 md:translate-x-0 ' : '-translate-x-full '
+      } md:relative `}
     >
       <div className="h-16 flex flex-row items-center px-4 md:hidden">
         <button

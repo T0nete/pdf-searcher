@@ -14,7 +14,10 @@ const SidebarProvider = (props: Props) => {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState<boolean>(() => {
     return false;
     // if (typeof window === 'undefined') return false;
-    // return JSON.parse(localStorage.getItem('isSidebarOpen') || 'false');
+    // return JSON.parse(
+    //   localStorage.getItem('isSidebarOpen') ||
+    //     (window.innerWidth > 768 ? 'true' : 'false')
+    // );
   });
 
   React.useEffect(() => {
