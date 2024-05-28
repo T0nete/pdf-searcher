@@ -14,11 +14,18 @@ type Props = {
 
 const ChatList = (props: Props) => {
   const { toggleSidebar } = React.useContext(SidebarContext);
+  const [openDropdownId, setOpenDropdownId] = React.useState<number | null>(
+    null
+  );
 
   const getChatTitle = (fileName: string | null, chatId: number) => {
     if (!fileName) return `Chat_${chatId}`;
     const fileNameArray = fileName.split('.pdf');
     return fileNameArray[0];
+  };
+
+  const handleDropdownChange = (isOpen: boolean, chatId: number) => {
+    setOpenDropdownId(isOpen ? chatId : null);
   };
 
   return (
@@ -31,7 +38,8 @@ const ChatList = (props: Props) => {
           >
             <div
               className={`flex items-center p-2 rounded-md w-full group ${
-                props.currentChatId === chat.id.toString()
+                props.currentChatId === chat.id.toString() ||
+                openDropdownId === chat.id
                   ? 'bg-brand-orange-hover'
                   : 'hover:bg-brand-orange-hover'
               }`}
@@ -43,7 +51,9 @@ const ChatList = (props: Props) => {
               >
                 {getChatTitle(chat.pdf_file_name, chat.id)}
               </Link>
-              <Dropdown />
+              <Dropdown
+                onOpenChange={(isOpen) => handleDropdownChange(isOpen, chat.id)}
+              />
             </div>
           </li>
         ))}

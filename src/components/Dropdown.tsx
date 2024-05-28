@@ -1,7 +1,10 @@
 import React from 'react';
 import Elipsis from './icons/Elipsis';
 
-export default function Dropdown({}) {
+interface Props {
+  onOpenChange: (isOpen: boolean) => void;
+}
+export default function Dropdown(props: Props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
@@ -11,6 +14,7 @@ export default function Dropdown({}) {
       !dropdownRef.current.contains(event.target as Node)
     ) {
       setIsOpen(false);
+      props.onOpenChange(false);
     }
   };
 
@@ -21,12 +25,17 @@ export default function Dropdown({}) {
     };
   }, []);
 
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+    props.onOpenChange(!isOpen);
+  };
+
   return (
     <div className={`relative flex text-left`} ref={dropdownRef}>
       <button
         type="button"
         className="w-full rounded-md hover:scale-110"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleDropdown}
       >
         <Elipsis />
       </button>
