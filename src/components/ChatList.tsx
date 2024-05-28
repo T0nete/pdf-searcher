@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { SidebarContext } from '@/providers/SidebarProvider';
 import { Chat } from '@/types/supabase-databse';
 import Elipsis from './icons/Elipsis';
+import Dropdown from './Dropdown';
 
 type Props = {
   currentChatId: string;
@@ -26,10 +27,10 @@ const ChatList = (props: Props) => {
         {props.chatList.map((chat) => (
           <li
             key={chat.id}
-            className={`flex items-center justify-start first:p-0 pt-1 cursor-pointer`}
+            className="flex items-center justify-between first:p-0 pt-1 cursor-pointer"
           >
             <div
-              className={`flex items-center bg p-2 rounded-md w-full group ${
+              className={`flex items-center p-2 rounded-md w-full group ${
                 props.currentChatId === chat.id.toString()
                   ? 'bg-brand-orange-hover'
                   : 'hover:bg-brand-orange-hover'
@@ -38,20 +39,11 @@ const ChatList = (props: Props) => {
               <Link
                 href={`/chat/${chat.id}`}
                 onClick={toggleSidebar}
-                className="w-full"
+                className="flex-1 truncate"
               >
-                <div>{getChatTitle(chat.pdf_file_name, chat.id)}</div>
+                {getChatTitle(chat.pdf_file_name, chat.id)}
               </Link>
-              <button
-                className={`ml-auto group-hover:block opacity-0 group-hover:opacity-100 hover:scale-110 ${
-                  props.currentChatId === chat.id.toString()
-                    ? 'opacity-100'
-                    : 'opacity-0 group-hover:opacity-100'
-                }`}
-                title="More options"
-              >
-                <Elipsis />
-              </button>
+              <Dropdown />
             </div>
           </li>
         ))}

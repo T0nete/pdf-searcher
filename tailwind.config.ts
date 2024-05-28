@@ -21,6 +21,7 @@ const config: Config = {
         'brand-orange-hover': '#FF7F50',
         dark: '#2c2c2c',
         'light-gray': '#3e3e3e',
+        'light-gray-hover': '#5c5c5c',
         'dark-gray': '#333333',
       },
     },
