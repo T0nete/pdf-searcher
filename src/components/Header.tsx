@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Menu from '@/components/icons/Menu';
+import Menu from '@/components/icons/BurgerMenu';
 import { cn } from '@/lib/utils';
 import { SidebarContext } from '@/providers/SidebarProvider';
 

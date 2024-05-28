@@ -4,7 +4,7 @@ import React from 'react';
 import { User } from '@supabase/supabase-js';
 import { SidebarContext } from '@/providers/SidebarProvider';
 import ChatList from '@/components/ChatList';
-import Menu from '@/components/icons/Menu';
+import Menu from '@/components/icons/BurgerMenu';
 import Logoutbutton from '@/components/GoogleButtons/LogoutButton';
 import LoginButton from '@/components/GoogleButtons/LoginButton';
 import { supabaseClient } from '@/lib/supabase/browserClient';

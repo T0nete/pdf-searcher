@@ -5,7 +5,7 @@ type Props = {
   className?: string;
 };
 
-const Menu = (props: Props) => {
+const Elipsis = (props: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -13,15 +13,15 @@ const Menu = (props: Props) => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={cn('w-6 h-6', props.className)}
+      className={cn('w-7 h-7', props.className)}
     >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+        d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
       />
     </svg>
   );
 };
 
-export default Menu;
+export default Elipsis;
