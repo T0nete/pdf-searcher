@@ -1,5 +1,6 @@
 import React from 'react';
 import Elipsis from './icons/Elipsis';
+import { toast } from 'react-toastify';
 
 interface Props {
   onOpenChange: (isOpen: boolean) => void;
@@ -30,6 +31,10 @@ export default function Dropdown(props: Props) {
     props.onOpenChange(!isOpen);
   };
 
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    toast.warning('Temporarily disabled.');
+  };
+
   return (
     <div className={`relative flex text-left`} ref={dropdownRef}>
       <button
@@ -44,12 +49,14 @@ export default function Dropdown(props: Props) {
           <button
             key={'1'}
             className="block px-4 py-2 text-sm text-white hover:bg-light-gray-hover w-full text-left"
+            onClick={onClick}
           >
             Change Title
           </button>
           <button
             key={'2'}
             className="block px-4 py-2 text-sm text-red-700 hover:font-bold hover:bg-light-gray-hover w-full text-left"
+            onClick={onClick}
           >
             Delete Chat
           </button>
