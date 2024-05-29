@@ -14,44 +14,47 @@ type Props = {
 
 const ChatMainContent = (props: Props) => {
   const { targetReached, handleUpdateTarget } = useMediaQuery(768);
+  const [showPDF, setShowPDF] = React.useState(!targetReached);
 
   const handleShowPDF = () => {
-    handleUpdateTarget();
+    // handleUpdateTarget();
+    console.log('handleUpdateTarget', !showPDF);
+    setShowPDF((prev) => !prev);
   };
+
+  React.useEffect(() => {
+    if (targetReached) {
+      setShowPDF(false);
+    }
+  }, [targetReached]);
 
   return (
     <div className="relative flex flex-col md:flex-row h-full pb-6 gap-6">
       <div
         className={`absolute bottom-6 right-0 md:hidden ${
-          targetReached ? 'block' : 'hidden'
+          showPDF ? 'block' : 'hidden'
         }`}
       >
         <button
           className="bg-brand-orange p-2 rounded-full hover:bg-brand-orange-hover duration-200 transition-colors"
           onClick={handleShowPDF}
         >
-          {targetReached ? <EyeHide /> : <EyeShow />}
+          {!showPDF ? <EyeShow /> : <EyeHide />}
         </button>
       </div>
-      <div
-        className={`w-full h-full ${
-          targetReached ? 'block' : 'hidden md:block'
-        }`}
-      >
+      <div className={`w-full h-full ${showPDF ? 'block' : 'hidden'}`}>
         <PDFViewer pdfUrl={props.chatData?.pdf_url ?? ''} />
       </div>
       <div
         className={`h-full w-full ${
-          targetReached
-            ? 'hidden md:block md:max-w-md'
-            : 'md:w-3/4 md:max-w-3xl'
+          !showPDF ? 'md:w-3/4 md:max-w-3xl' : 'hidden md:block md:max-w-md'
         } mx-auto`}
       >
         <ChatComponent
           chatId={props.chatData.id}
           fileName={props.chatData.pdf_file_name ?? ''}
           className="h-full"
-          showPDF={targetReached}
+          showPDF={showPDF}
           handleShowPDF={handleShowPDF}
         />
       </div>
