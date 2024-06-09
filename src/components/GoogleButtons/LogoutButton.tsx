@@ -18,6 +18,7 @@ const Logoutbutton = (props: Props) => {
       toast.error(`Error logging out: ${error.message}`);
     }
 
+    console.log('Logged out')
     router.push('/');
   };
 

@@ -52,6 +52,23 @@ export const getChatsByUserId = async (userId: string) => {
   return data as Chat[];
 };
 
+export const getLastChatByUserId = async (userId: string) => {
+  const { data, error } = await createClient()
+    .from('chat')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error || !data ) {
+    console.error('Error getting chat: ', error);
+    return null;
+  }
+
+  return data as Chat;
+}
+
 interface ICreateChat {
   fileName: string;
   fileKey: string;
