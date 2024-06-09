@@ -52,7 +52,7 @@ const ChatMainContent = (props: Props) => {
       >
         <ChatComponent
           chatId={props.chatData.id}
-          fileName={props.chatData.pdf_file_name ?? ''}
+          fileKey={props.chatData.pdf_key ?? ''}
           className="h-full"
           showPDF={showPDF}
           handleShowPDF={handleShowPDF}

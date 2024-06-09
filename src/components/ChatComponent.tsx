@@ -13,7 +13,7 @@ import EyeShow from './icons/EyeShow';
 
 interface ChatComponentProps {
   chatId: number;
-  fileName: string;
+  fileKey: string;
   className?: string;
   showPDF: boolean;
   handleShowPDF: () => void;
@@ -48,7 +48,7 @@ const ChatComponent = (props: ChatComponentProps) => {
     handleSubmit,
   } = useChat({
     api: '/api/chat',
-    body: { chatId: props.chatId, fileName: props.fileName },
+    body: { chatId: props.chatId, fileKey: props.fileKey },
     initialMessages,
   });
 

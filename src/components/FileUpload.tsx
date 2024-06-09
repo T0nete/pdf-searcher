@@ -35,7 +35,7 @@ const FileUpload = () => {
       const fileKey = `${timestamp}-${fileName}`;
       try {
         // Validate if the user has already uploaded a file
-        const searchParams = encodeURIComponent(fileName);
+        const searchParams = encodeURIComponent(fileKey);
         const { data } = await axios.get(`/api/chat?fileName=${searchParams}`);
 
         if (!data.success) {

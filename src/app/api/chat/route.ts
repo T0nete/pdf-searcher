@@ -18,10 +18,10 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const { chatId, messages, fileName } = await req.json();
+    const { chatId, messages, fileKey } = await req.json();
 
     const lastMessage = messages[messages.length - 1];
-    const context = await getContext(lastMessage.content, fileName);
+    const context = await getContext(lastMessage.content, fileKey);
 
     const prompt = [
       {
