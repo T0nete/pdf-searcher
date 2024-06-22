@@ -1,4 +1,3 @@
-// app/components/PDFViewerServer.tsx
 import React from 'react';
 import PDFViewer from './PDFViewer';
 
@@ -8,9 +7,7 @@ type Props = {
 
 const PDFViewerServer = ({ pdfUrl }: Props) => {
   return (
-    <div>
-      <PDFViewer pdfUrl={pdfUrl} />
-    </div>
+    <PDFViewer pdfUrl={pdfUrl} />
   );
 };
 

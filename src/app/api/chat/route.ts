@@ -85,7 +85,6 @@ export async function GET(req: NextRequest) {
 
     const user = await createClient().auth.getUser();
 
-    console.log('user', user.data.user);
     // Get the chat from the authenticated user
     if (user.data.user) {
       return authorizedUserChat(user.data.user.id, fileName);
