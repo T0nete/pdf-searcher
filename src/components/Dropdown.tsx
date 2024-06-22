@@ -1,9 +1,8 @@
 import React from 'react';
 import Elipsis from './icons/Elipsis';
 import { toast } from 'react-toastify';
-import { useFormState } from 'react-dom';
-import { removeChat } from '@/actions/chatlist-action';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface Props {
   chatId: number
@@ -16,21 +15,6 @@ export default function Dropdown(props: Props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const router = useRouter();
-
-  const [formState, action] = useFormState(
-    removeChat.bind(null, { id: props.chatId, fileName: props.fileName }),
-    {}
-  );
-
-  React.useEffect(() => {
-    if (formState.success) {
-      toast.success('Chat deleted successfully.');
-      setIsOpen(false);
-      props.onOpenChange(false);
-    } else if (formState.success === false) {
-      toast.error('Error deleting chat.');
-    }
-  }, [formState]);
 
   const handleClickOutside = (event: MouseEvent | globalThis.MouseEvent) => {
     if (
@@ -52,23 +36,24 @@ export default function Dropdown(props: Props) {
   const handleRemoveChat = async () => {
     try {
       props.handleIsLoading(true);
-      const response = await removeChat({ id: props.chatId, fileName: props.fileName }); // Asume que removeChat es tu acción del servidor
-      if (response.success) {
-        toast.success('Chat removed successfully');
-        setIsOpen(false);
-        props.onOpenChange(false);
+      const res = await axios.delete('/api/chat', {
+        data: {
+          chatId: props.chatId,
+          fileKey: props.fileName,
+        },
+      });
 
-        router.push('/chat');
-      } else {
-        toast.error('Error deleting chat.');
-      }
+      toast.success('Chat removed successfully!');
+      setIsOpen(false);
+      props.onOpenChange(false);
 
+      router.push('/chat');
     } catch (error) {
       toast.error('Error deleting chat.');
     } finally {
       props.handleIsLoading(false);
     }
-  };
+  }
 
 
   const toggleDropdown = () => {

@@ -8,6 +8,9 @@ import {
 } from '@/lib/supabase/supabase-upload';
 import { createChatMessage } from '@/lib/supabase/supabase-messages';
 import { createClient } from '@/lib/supabase/serverClient';
+import { deleteFileFromBucket } from '@/lib/supabase/supabase-storage';
+import { deleteChat } from '@/lib/supabase/supabase-chats';
+import { deleteFileFromPinecone } from '@/lib/pinecone/pinecone';
 
 // Create an OpenAI API client (that's edge friendly!)
 const openai = new OpenAI({
@@ -94,6 +97,34 @@ export async function GET(req: NextRequest) {
     return unauthorizedUserChat(req, fileName);
   } catch (error) {
     return NextResponse.error();
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    console.log('DELETE /api/chat')
+    const { chatId, fileKey } = await req.json();
+
+    let success: boolean = false
+    // Remove from storage
+    success = await deleteFileFromBucket(fileKey)
+
+    // Remove chat from database
+    success = await deleteChat(chatId)
+
+    // Remove from  pinecone
+    success = await deleteFileFromPinecone(fileKey)
+
+    return NextResponse.json(
+      { success: true, message: 'Chat deleted' },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Unexpected Error deleting chat: ', error);
+    return NextResponse.json(
+      { success: false, message: 'Error deleting chat' },
+      { status: 500 }
+    );
   }
 }
 
