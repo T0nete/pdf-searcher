@@ -1,18 +1,21 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 
 type PDFViewerProps = {
   pdfUrl: string;
 };
 
-const PDFViewer = (props: PDFViewerProps) => {
-  if (!props.pdfUrl) {
+const PDFViewer = ({ pdfUrl }: PDFViewerProps) => {
+  if (!pdfUrl) {
     return <div>PDF not found</div>;
   }
 
   return (
     <iframe
-      key={props.pdfUrl}
-      src={`https://docs.google.com/gview?url=${props.pdfUrl}&embedded=true`}
+      key={pdfUrl}
+      // src={`https://drive.google.com/file/d/${pdfUrl}}/preview`}
+      src={`https://docs.google.com/gview?url=${pdfUrl}&embedded=true`}
       width="100%"
       height="100%"
       className="rounded-lg shadow-xl"

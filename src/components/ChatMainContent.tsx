@@ -7,18 +7,17 @@ import { Chat } from '@/types/supabase-databse';
 import EyeHide from '@/components/icons/EyeHide';
 import EyeShow from '@/components/icons/EyeShow';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import PDFViewerServer from './PDFViewerContainer';
 
 type Props = {
   chatData: Chat;
 };
 
 const ChatMainContent = (props: Props) => {
-  const { targetReached, handleUpdateTarget } = useMediaQuery(768);
+  const { targetReached } = useMediaQuery(768);
   const [showPDF, setShowPDF] = React.useState(!targetReached);
 
   const handleShowPDF = () => {
-    // handleUpdateTarget();
-    console.log('handleUpdateTarget', !showPDF);
     setShowPDF((prev) => !prev);
   };
 
@@ -43,7 +42,7 @@ const ChatMainContent = (props: Props) => {
         </button>
       </div>
       <div className={`w-full h-full ${showPDF ? 'block' : 'hidden'}`}>
-        <PDFViewer pdfUrl={props.chatData?.pdf_url ?? ''} />
+        <PDFViewerServer pdfUrl={props.chatData?.pdf_url ?? ''} />
       </div>
       <div
         className={`h-full w-full ${
