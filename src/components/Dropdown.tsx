@@ -8,7 +8,9 @@ import { useRouter } from 'next/navigation';
 interface Props {
   chatId: number
   fileName: string
+  isLoading: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  handleIsLoading: (value: boolean) => void;
 }
 export default function Dropdown(props: Props) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -48,15 +50,23 @@ export default function Dropdown(props: Props) {
   }, []);
 
   const handleRemoveChat = async () => {
-    const response = await removeChat({ id: props.chatId, fileName: props.fileName }); // Asume que removeChat es tu acción del servidor
-    if (response.success) {
-      toast.success('Chat removed successfully');
-      setIsOpen(false);
-      props.onOpenChange(false);
+    try {
+      props.handleIsLoading(true);
+      const response = await removeChat({ id: props.chatId, fileName: props.fileName }); // Asume que removeChat es tu acción del servidor
+      if (response.success) {
+        toast.success('Chat removed successfully');
+        setIsOpen(false);
+        props.onOpenChange(false);
 
-      router.push('/chat');
-    } else {
+        router.push('/chat');
+      } else {
+        toast.error('Error deleting chat.');
+      }
+
+    } catch (error) {
       toast.error('Error deleting chat.');
+    } finally {
+      props.handleIsLoading(false);
     }
   };
 
@@ -94,6 +104,7 @@ export default function Dropdown(props: Props) {
             key={'2'}
             className="block px-4 py-2 text-sm text-red-700 hover:font-bold hover:bg-light-gray-hover w-full text-left"
             onClick={handleRemoveChat}
+            disabled={props.isLoading}
           >
             Delete Chat
           </button>

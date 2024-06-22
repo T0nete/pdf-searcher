@@ -25,7 +25,7 @@ const Header = (props: HeaderProps) => {
         <Menu />
       </button>
       <Link
-        href="/"
+        href="/chat"
         className="text-3xl text-brand-orange font-bold md:px0 text-center"
       >
         PDF Searcher

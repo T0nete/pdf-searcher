@@ -4,12 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { SidebarContext } from '@/providers/SidebarProvider';
 import { Chat } from '@/types/supabase-databse';
-import Elipsis from './icons/Elipsis';
 import Dropdown from './Dropdown';
 
 type Props = {
-  currentChatId: string;
+  currentChatId: string | undefined;
   chatList: Chat[];
+  isLoading: boolean;
+  handleIsLoading: (value: boolean) => void;
 };
 
 const ChatList = (props: Props) => {
@@ -28,7 +29,6 @@ const ChatList = (props: Props) => {
     setOpenDropdownId(isOpen ? chatId : null);
   };
 
-
   return (
     <div>
       <ul>
@@ -44,17 +44,27 @@ const ChatList = (props: Props) => {
                 : 'hover:bg-brand-orange-hover'
                 }`}
             >
-              <Link
-                href={`/chat/${chat.id}`}
-                onClick={toggleSidebar}
-                className="flex-1 truncate"
-              >
-                {getChatTitle(chat.pdf_file_name, chat.id)}
-              </Link>
+              {
+                props.isLoading ? (
+                  <Link
+                    href={`/chat/${chat.id}`}
+                    onClick={toggleSidebar}
+                    className="flex-1 truncate"
+                  >
+                    {getChatTitle(chat.pdf_file_name, chat.id)}
+                  </Link>
+                ) : (
+                  <div className="flex-1 truncate">
+                    {getChatTitle(chat.pdf_file_name, chat.id)}
+                  </div>
+                )
+              }
               <Dropdown
                 chatId={chat.id}
                 fileName={chat.pdf_key ?? ''}
+                isLoading={props.isLoading}
                 onOpenChange={(isOpen) => handleDropdownChange(isOpen, chat.id)}
+                handleIsLoading={props.handleIsLoading}
               />
             </div>
           </li>

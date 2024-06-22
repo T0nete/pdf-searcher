@@ -10,8 +10,10 @@ import LoginButton from '@/components/GoogleButtons/LoginButton';
 import { supabaseClient } from '@/lib/supabase/browserClient';
 
 type Props = {
-  currentChatId: string;
+  currentChatId: string | undefined;
   chatList: any;
+  isLoading: boolean;
+  handleIsLoading: (value: boolean) => void;
 };
 
 const Sidebar = (props: Props) => {
@@ -27,11 +29,11 @@ const Sidebar = (props: Props) => {
     fetchUserData();
   }, [setUser]);
 
+  console.log('props.isLoading', props.isLoading)
   return (
     <aside
-      className={`fixed top-0 left-0 z-30 w-64 h-full bg-dark transition-transform duration-300 ease-in-out ${
-        isSidebarOpen ? 'translate-x-0 md:translate-x-0 ' : '-translate-x-full '
-      } md:relative `}
+      className={`fixed top-0 left-0 z-30 w-64 h-full bg-dark transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0 md:translate-x-0 ' : '-translate-x-full '
+        } md:relative `}
     >
       <div className="h-16 flex flex-row items-center px-4 md:hidden">
         <button
@@ -45,11 +47,13 @@ const Sidebar = (props: Props) => {
         <ChatList
           currentChatId={props.currentChatId}
           chatList={props.chatList}
+          isLoading={props.isLoading}
+          handleIsLoading={props.handleIsLoading}
         />
         {user ? (
-          <Logoutbutton />
+          <Logoutbutton isDisabled={props.isLoading} />
         ) : (
-          <LoginButton currentChatId={props.currentChatId} />
+          <LoginButton currentChatId={props.currentChatId} isDisabled={props.isLoading} />
         )}
       </div>
     </aside>

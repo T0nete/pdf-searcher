@@ -9,7 +9,10 @@ import { uploadFileToBucket } from '@/lib/supabase/supabase-storage';
 import UploadIcon from '@/components/icons/UploadIcon';
 import LoadingIcon from '@/components/icons/LoadingIcon';
 
-const FileUpload = () => {
+interface FileUploadProps {
+  handleIsLoading?: (isLoading: boolean) => void;
+}
+const FileUpload = (props: FileUploadProps) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
 
@@ -20,11 +23,13 @@ const FileUpload = () => {
     maxFiles: 1,
     disabled: isLoading,
     onDrop: async (acceptedFiles) => {
+      props.handleIsLoading?.(true);
       setIsLoading(true);
 
       // Validate file size
       if (acceptedFiles[0].size > 10 * 1024 * 1024) {
         toast.error('File size is too large, please upload a file under 10MB.');
+        props.handleIsLoading?.(false);
         setIsLoading(false);
         return;
       }
@@ -74,6 +79,7 @@ const FileUpload = () => {
         return;
       } finally {
         setIsLoading(false);
+        props.handleIsLoading?.(false);
       }
     },
   });
@@ -81,11 +87,10 @@ const FileUpload = () => {
   return (
     <div
       {...getRootProps()}
-      className={`group rounded border border-light-gray bg-dark-gray hover:cursor-pointer hover:border-brand-orange shadow-md hover:shadow-brand-orange transition-all duration-300 ${
-        isDragActive
-          ? 'border-brand-orange shadow-brand-orange transition-all duration-300'
-          : ''
-      }`}
+      className={`group rounded border border-light-gray bg-dark-gray hover:cursor-pointer hover:border-brand-orange shadow-md hover:shadow-brand-orange transition-all duration-300 ${isDragActive
+        ? 'border-brand-orange shadow-brand-orange transition-all duration-300'
+        : ''
+        }`}
     >
       <div className="w-96 h-96 flex items-center justify-center">
         <input {...getInputProps()} />
@@ -103,9 +108,8 @@ const FileUpload = () => {
                 <p>Upload your PDF!</p>
               )}
               <UploadIcon
-                className={`w-24 h-24 text-light-gray group-hover:text-white transition-all duration-300 ${
-                  isDragActive ? 'text-white' : ' '
-                }`}
+                className={`w-24 h-24 text-light-gray group-hover:text-white transition-all duration-300 ${isDragActive ? 'text-white' : ' '
+                  }`}
               />
             </div>
           )}

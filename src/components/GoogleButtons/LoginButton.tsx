@@ -4,7 +4,8 @@ import { supabaseClient } from '@/lib/supabase/browserClient';
 import { toast } from 'react-toastify';
 
 type Props = {
-  currentChatId: string;
+  currentChatId: string | undefined;
+  isDisabled?: boolean;
 };
 
 const LoginButton = (props: Props) => {
@@ -25,6 +26,7 @@ const LoginButton = (props: Props) => {
     <button
       onClick={handleLogin}
       className="py-2 px-4 flex flex-row rounded-md w-full items-center justify-center text-white   bg-brand-orange hover:bg-brand-orange-hover duration-200 transition-colors"
+      disabled={props.isDisabled}
     >
       <Google />
       <p>Sign in with Google</p>
