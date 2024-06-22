@@ -61,7 +61,7 @@ export const getLastChatByUserId = async (userId: string) => {
     .limit(1)
     .single();
 
-  if (error || !data ) {
+  if (error || !data) {
     console.error('Error getting chat: ', error);
     return null;
   }
@@ -126,3 +126,18 @@ export const updateChatWithUserIdById = async (
 
   return true;
 };
+
+export const deleteChat = async (id: number) => {
+  // Remove chat from database
+  const { error: dbError } = await createClient()
+    .from('chat')
+    .delete()
+    .eq('id', id);
+
+  if (dbError) {
+    console.error('Error removing chat from database: ', dbError);
+    return false;
+  }
+
+  return true;
+}

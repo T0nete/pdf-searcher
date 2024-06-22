@@ -90,3 +90,21 @@ const getEmbeddedVectors = async (document: Document) => {
     },
   } as PineconeRecord;
 };
+
+export const deleteFileFromPinecone = async (fileName: string) => {
+  try {
+    const pinecone = getPineConeClient();
+    const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX!);
+    const pineconeNamespace = pineconeIndex.namespace(fileName);
+    await pineconeNamespace.deleteAll();
+
+    return true;
+  } catch (error) {
+    console.error('Unexpected Error deleting file from Pinecone: ', error);
+    let errorMessage = 'An error occurred while deleting the file from Pinecone';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    throw new Error(errorMessage);
+  }
+}

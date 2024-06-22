@@ -42,3 +42,24 @@ export const downloadFileFromBucket = async (fileName: string) => {
 export const getPublicUrl = (fileName: string) => {
   return supabaseClient.storage.from('pdf').getPublicUrl(fileName);
 };
+
+export const deleteFileFromBucket = async (fileName: string) => {
+  try {
+    const { error } = await supabaseClient.storage
+      .from('pdf')
+      .remove([fileName]);
+
+    if (error) {
+      console.error('Error deleting file: ', error);
+      throw new Error(error.message);
+    }
+    return true;
+  } catch (error) {
+    console.error('Unexpected Error deleting file: ', error);
+    let errorMessage = 'An error occurred while deleting the file';
+    if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    return false;
+  }
+}

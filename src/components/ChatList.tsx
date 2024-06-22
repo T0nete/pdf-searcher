@@ -28,21 +28,21 @@ const ChatList = (props: Props) => {
     setOpenDropdownId(isOpen ? chatId : null);
   };
 
+
   return (
     <div>
       <ul>
-        {props.chatList.map((chat) => (
+        {props.chatList?.map((chat) => (
           <li
             key={chat.id}
             className="flex items-center justify-between first:p-0 pt-1 cursor-pointer"
           >
             <div
-              className={`flex items-center p-2 rounded-md w-full group ${
-                props.currentChatId === chat.id.toString() ||
+              className={`flex items-center p-2 rounded-md w-full group ${props.currentChatId === chat.id.toString() ||
                 openDropdownId === chat.id
-                  ? 'bg-brand-orange-hover'
-                  : 'hover:bg-brand-orange-hover'
-              }`}
+                ? 'bg-brand-orange-hover'
+                : 'hover:bg-brand-orange-hover'
+                }`}
             >
               <Link
                 href={`/chat/${chat.id}`}
@@ -52,6 +52,8 @@ const ChatList = (props: Props) => {
                 {getChatTitle(chat.pdf_file_name, chat.id)}
               </Link>
               <Dropdown
+                chatId={chat.id}
+                fileName={chat.pdf_key ?? ''}
                 onOpenChange={(isOpen) => handleDropdownChange(isOpen, chat.id)}
               />
             </div>
