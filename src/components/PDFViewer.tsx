@@ -40,7 +40,7 @@ const PDFViewer = ({ pdfUrl }: PDFViewerProps) => {
   }
 
   return (
-    <div className="rounded-lg shadow-xl h-100 w-100">
+    <div className="rounded-lg shadow-xl" style={{ height: '100%', width: '100%' }}>
       <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.0.279/build/pdf.worker.min.js`}>
         <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
       </Worker>

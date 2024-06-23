@@ -29,7 +29,7 @@ const ChatMainContent = (props: Props) => {
   return (
     <div className="relative flex flex-col md:flex-row h-full pb-6 gap-6">
       <div
-        className={`absolute bottom-6 right-0 md:hidden ${showPDF ? 'block' : 'hidden'
+        className={`absolute bottom-6 right-0 md:hidden z-30 ${showPDF ? 'block' : 'hidden'
           }`}
       >
         <button
