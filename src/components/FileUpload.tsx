@@ -8,9 +8,11 @@ import { toast } from 'react-toastify';
 import { uploadFileToBucket } from '@/lib/supabase/supabase-storage';
 import UploadIcon from '@/components/icons/UploadIcon';
 import LoadingIcon from '@/components/icons/LoadingIcon';
+import { cn } from '@/lib/utils';
 
 interface FileUploadProps {
   handleIsLoading?: (isLoading: boolean) => void;
+  className?: string;
 }
 const FileUpload = (props: FileUploadProps) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -92,7 +94,7 @@ const FileUpload = (props: FileUploadProps) => {
         : ''
         }`}
     >
-      <div className="w-96 h-96 flex items-center justify-center">
+      <div className={cn("w-96 h-96 flex items-center justify-center", props.className)}>
         <input {...getInputProps()} />
         <div className="text-2xl">
           {isLoading ? (

@@ -2,7 +2,6 @@ import { supabaseClient } from './browserClient';
 
 export const uploadFileToBucket = async (file: File, fileKey: string) => {
   try {
-    console.log('uploadFileToBucket');
     const { error } = await supabaseClient.storage
       .from('pdf')
       .upload(fileKey, file);
