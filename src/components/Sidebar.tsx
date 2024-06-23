@@ -29,32 +29,35 @@ const Sidebar = (props: Props) => {
     fetchUserData();
   }, [setUser]);
 
-  console.log('props.isLoading', props.isLoading)
   return (
     <aside
-      className={`fixed top-0 left-0 z-30 w-64 h-full bg-dark transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0 md:translate-x-0 ' : '-translate-x-full '
+      className={`fixed top-0 left-0 z-30 w-64 h-full bg-dark transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0 md:translate-x-0' : '-translate-x-full '
         } md:relative `}
     >
-      <div className="h-16 flex flex-row items-center px-4 md:hidden">
-        <button
-          className="bg-brand-orange p-1 rounded-md hover:bg-brand-orange-hover duration-200 transition-colors"
-          onClick={toggleSidebar}
-        >
-          <Menu />
-        </button>
-      </div>
-      <div className="flex flex-col w-full h-full bg-dark-gray justify-between p-2">
-        <ChatList
-          currentChatId={props.currentChatId}
-          chatList={props.chatList}
-          isLoading={props.isLoading}
-          handleIsLoading={props.handleIsLoading}
-        />
-        {user ? (
-          <Logoutbutton isDisabled={props.isLoading} />
-        ) : (
-          <LoginButton currentChatId={props.currentChatId} isDisabled={props.isLoading} />
-        )}
+      <div className='flex flex-col h-full'>
+        <div className="h-16 flex flex-row items-center px-4 md:hidden">
+          <button
+            className="bg-brand-orange p-1 rounded-md hover:bg-brand-orange-hover duration-200 transition-colors"
+            onClick={toggleSidebar}
+          >
+            <Menu />
+          </button>
+        </div>
+        <div className="flex flex-col w-full h-full bg-dark-gray p-2">
+          <ChatList
+            currentChatId={props.currentChatId}
+            chatList={props.chatList}
+            isLoading={props.isLoading}
+            handleIsLoading={props.handleIsLoading}
+          />
+          <div className='flex mt-auto align-bottom'>
+            {user ? (
+              <Logoutbutton isDisabled={props.isLoading} />
+            ) : (
+              <LoginButton currentChatId={props.currentChatId} isDisabled={props.isLoading} />
+            )}
+          </div>
+        </div>
       </div>
     </aside>
   );

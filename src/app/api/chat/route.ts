@@ -102,7 +102,6 @@ export async function GET(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    console.log('DELETE /api/chat')
     const { chatId, fileKey } = await req.json();
 
     let success: boolean = false

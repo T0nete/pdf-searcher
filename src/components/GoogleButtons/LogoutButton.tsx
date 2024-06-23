@@ -5,9 +5,11 @@ import { toast } from 'react-toastify';
 import Logout from '@/components/icons/Logout';
 import { supabaseClient } from '@/lib/supabase/browserClient';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 type Props = {
   isDisabled?: boolean;
+  className?: string;
 };
 
 const Logoutbutton = (props: Props) => {
@@ -20,7 +22,6 @@ const Logoutbutton = (props: Props) => {
       toast.error(`Error logging out: ${error.message}`);
     }
 
-    console.log('Logged out')
     router.push('/');
   };
 

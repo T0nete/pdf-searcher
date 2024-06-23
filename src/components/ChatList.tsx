@@ -30,47 +30,45 @@ const ChatList = (props: Props) => {
   };
 
   return (
-    <div>
-      <ul>
-        {props.chatList?.map((chat) => (
-          <li
-            key={chat.id}
-            className="flex items-center justify-between first:p-0 pt-1 cursor-pointer"
+    <ul className='flex flex-col'>
+      {props.chatList?.map((chat) => (
+        <li
+          key={chat.id}
+          className="flex items-center justify-between first:p-0 pt-1 cursor-pointer"
+        >
+          <div
+            className={`flex items-center p-2 rounded-md w-full group ${props.currentChatId === chat.id.toString() ||
+              openDropdownId === chat.id
+              ? 'bg-brand-orange-hover'
+              : 'hover:bg-brand-orange-hover'
+              }`}
           >
-            <div
-              className={`flex items-center p-2 rounded-md w-full group ${props.currentChatId === chat.id.toString() ||
-                openDropdownId === chat.id
-                ? 'bg-brand-orange-hover'
-                : 'hover:bg-brand-orange-hover'
-                }`}
-            >
-              {
-                props.isLoading ? (
-                  <Link
-                    href={`/chat/${chat.id}`}
-                    onClick={toggleSidebar}
-                    className="flex-1 truncate"
-                  >
-                    {getChatTitle(chat.pdf_file_name, chat.id)}
-                  </Link>
-                ) : (
-                  <div className="flex-1 truncate">
-                    {getChatTitle(chat.pdf_file_name, chat.id)}
-                  </div>
-                )
-              }
-              <Dropdown
-                chatId={chat.id}
-                fileName={chat.pdf_key ?? ''}
-                isLoading={props.isLoading}
-                onOpenChange={(isOpen) => handleDropdownChange(isOpen, chat.id)}
-                handleIsLoading={props.handleIsLoading}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
+            {
+              props.isLoading ? (
+                <Link
+                  href={`/chat/${chat.id}`}
+                  onClick={toggleSidebar}
+                  className="flex-1 truncate"
+                >
+                  {getChatTitle(chat.pdf_file_name, chat.id)}
+                </Link>
+              ) : (
+                <div className="flex-1 truncate">
+                  {getChatTitle(chat.pdf_file_name, chat.id)}
+                </div>
+              )
+            }
+            <Dropdown
+              chatId={chat.id}
+              fileName={chat.pdf_key ?? ''}
+              isLoading={props.isLoading}
+              onOpenChange={(isOpen) => handleDropdownChange(isOpen, chat.id)}
+              handleIsLoading={props.handleIsLoading}
+            />
+          </div>
+        </li>
+      ))}
+    </ul>
   );
 };
 
