@@ -1,3 +1,4 @@
+import BlurBackground from '@/components/DarkBackground';
 import MainContentWrapper from '@/components/MainContentWrapper';
 import { createClient } from '@/lib/supabase/serverClient';
 import { getChatsByIp, getChatsByUserId } from '@/lib/supabase/supabase-chats';
@@ -28,9 +29,8 @@ const DefaultChatPage = async (props: Props) => {
 
     return (
         <div className="flex flex-1 h-full relative overflow-hidden gap-2">
-            <MainContentWrapper
-                chatList={_chatList}
-            />
+            <MainContentWrapper chatList={_chatList} />
+            <BlurBackground />
         </div>
     )
 }

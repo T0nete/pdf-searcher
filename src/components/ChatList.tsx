@@ -29,6 +29,7 @@ const ChatList = (props: Props) => {
     setOpenDropdownId(isOpen ? chatId : null);
   };
 
+  console.log('props.isLoading', props.isLoading)
   return (
     <ul className='flex flex-col'>
       {props.chatList?.map((chat) => (
@@ -44,7 +45,7 @@ const ChatList = (props: Props) => {
               }`}
           >
             {
-              props.isLoading ? (
+              !props.isLoading ? (
                 <Link
                   href={`/chat/${chat.id}`}
                   onClick={toggleSidebar}

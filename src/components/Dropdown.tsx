@@ -55,14 +55,9 @@ export default function Dropdown(props: Props) {
     }
   }
 
-
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
     props.onOpenChange(!isOpen);
-  };
-
-  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    toast.warning('Temporarily disabled.');
   };
 
   return (
@@ -76,18 +71,10 @@ export default function Dropdown(props: Props) {
       </button>
       {isOpen && (
         <div className="z-50 origin-top-left absolute mt-6 w-48 rounded-md shadow-lg bg-light-gray ring-1 ring-dark py-1">
-          {/* <button
-            key={'1'}
-            className="block px-4 py-2 text-sm text-white hover:bg-light-gray-hover w-full text-left"
-            onClick={onClick}
-          >
-            Change Title
-          </button> */}
-          {/* <form action={action}> */}
           <button
             type='submit'
-            key={'2'}
-            className="block px-4 py-2 text-sm text-red-700 hover:font-bold hover:bg-light-gray-hover w-full text-left"
+            key='delete-chat'
+            className="block px-4 py-2 text-sm font-semibold text-red-500 hover:font-bold hover:bg-light-gray-hover w-full text-left"
             onClick={handleRemoveChat}
             disabled={props.isLoading}
           >
