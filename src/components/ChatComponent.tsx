@@ -70,7 +70,7 @@ const ChatComponent = (props: ChatComponentProps) => {
         <input
           className="w-full p-2 bg-dark-gray border border-light-gray rounded shadow-xl focus:border-brand-orange focus:outline-none"
           value={input}
-          placeholder="Say something..."
+          placeholder="Ask something..."
           onChange={handleInputChange}
         />
         <button
