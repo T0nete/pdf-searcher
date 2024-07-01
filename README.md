@@ -10,7 +10,7 @@
 
 ## Tech Stack
 
-- **Frontend:** Next.js, TypeScript, Tailwindcss
+- **Next.js, TypeScript, Tailwindcss**
 - **Hosting:** Vercel
 - **File Storage:** Supabase (S3-compatible storage)
 - **Database:** Supabase
