@@ -39,7 +39,7 @@ const ChatList = (props: Props) => {
           <div
             className={`flex items-center p-2 rounded-md w-full group ${props.currentChatId === chat.id.toString() ||
               openDropdownId === chat.id
-              ? 'bg-brand-orange-hover'
+              ? 'bg-brand-orange'
               : 'hover:bg-brand-orange-hover'
               }`}
           >

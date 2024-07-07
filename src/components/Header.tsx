@@ -26,7 +26,7 @@ const Header = (props: HeaderProps) => {
       </button>
       <Link
         href="/chat"
-        className="text-3xl text-brand-orange font-bold md:px0 text-center"
+        className="text-3xl text-brand-orange-hover font-bold md:px0 text-center"
       >
         PDF Searcher
       </Link>

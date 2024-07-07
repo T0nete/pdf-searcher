@@ -25,8 +25,8 @@ const config: Config = {
         dosis: ['Dosis', 'sans-serif'],
       },
       colors: {
-        'brand-orange': '#FF4F18',
-        'brand-orange-hover': '#FF7F50',
+        'brand-orange': '#FF7F50',
+        'brand-orange-hover': '#FF4F18',
         dark: '#2c2c2c',
         'light-gray': '#3e3e3e',
         'light-gray-hover': '#5c5c5c',
