@@ -8,19 +8,23 @@ import { redirect } from 'next/navigation';
 export default async function Home() {
   const { data } = await createClient().auth.getUser();
 
-  if  (data && data.user) {
+  if (data && data.user) {
     // Fetch user last chat and redirect to it
     const lastChat = await getLastChatByUserId(data.user.id);
     if (lastChat) {
       redirect(`/chat/${lastChat.id}`);
     }
   }
-  
+
   return (
-    <div className="flex justify-center h-full">
+    <div className="flex justify-center h-full lg:max-w-5xl mx-auto">
       <div className="flex flex-col md:flex-row justify-center items-center gap-12">
-        <Hero />
-        <FileUpload />
+        <div className='flex-2'>
+          <Hero />
+        </div>
+        <div className='flex-1'>
+          <FileUpload />
+        </div>
       </div>
     </div>
   );

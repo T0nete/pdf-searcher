@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} font-dosis container mx-auto h-dvh`}>
+      <body className={`${inter.className} font-baloo container mx-auto h-dvh p-2 md:p-0 grid-white`}>
         <ToastContainer theme="dark" />
         <Providers>{children}</Providers>
       </body>

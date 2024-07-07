@@ -43,7 +43,7 @@ const Sidebar = (props: Props) => {
             <Menu />
           </button>
         </div>
-        <div className="flex flex-col w-full h-full bg-dark-gray p-2">
+        <div className="flex flex-col w-full h-full bg-dark-gray border border-light-gray p-2">
           <ChatList
             currentChatId={props.currentChatId}
             chatList={props.chatList}
