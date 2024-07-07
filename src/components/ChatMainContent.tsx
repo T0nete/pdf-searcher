@@ -10,6 +10,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 
 type Props = {
   chatData: Chat;
+  isDisabled: boolean;
 };
 
 const ChatMainContent = (props: Props) => {
@@ -35,6 +36,7 @@ const ChatMainContent = (props: Props) => {
         <button
           className="bg-brand-orange p-2 rounded-full hover:bg-brand-orange-hover duration-200 transition-colors"
           onClick={handleShowPDF}
+          disabled={props.isDisabled}
         >
           {!showPDF ? <EyeShow /> : <EyeHide />}
         </button>
@@ -52,6 +54,7 @@ const ChatMainContent = (props: Props) => {
           className="h-full"
           showPDF={showPDF}
           handleShowPDF={handleShowPDF}
+          isDisabled={props.isDisabled}
         />
       </div>
     </div>

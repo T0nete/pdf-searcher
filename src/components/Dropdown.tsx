@@ -3,6 +3,7 @@ import Elipsis from './icons/Elipsis';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { SidebarContext } from '@/providers/SidebarProvider';
 
 interface Props {
   chatId: number
@@ -12,6 +13,7 @@ interface Props {
   handleIsLoading: (value: boolean) => void;
 }
 export default function Dropdown(props: Props) {
+  const { toggleSidebar } = React.useContext(SidebarContext);
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -36,6 +38,8 @@ export default function Dropdown(props: Props) {
   const handleRemoveChat = async () => {
     try {
       props.handleIsLoading(true);
+      setIsOpen(false);
+      toggleSidebar()
       const res = await axios.delete('/api/chat', {
         data: {
           chatId: props.chatId,
@@ -80,7 +84,6 @@ export default function Dropdown(props: Props) {
           >
             Delete Chat
           </button>
-          {/* </form> */}
         </div>
       )}
     </div>

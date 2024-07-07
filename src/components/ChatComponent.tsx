@@ -16,6 +16,7 @@ interface ChatComponentProps {
   fileKey: string;
   className?: string;
   showPDF: boolean;
+  isDisabled: boolean;
   handleShowPDF: () => void;
 }
 const ChatComponent = (props: ChatComponentProps) => {
@@ -72,11 +73,13 @@ const ChatComponent = (props: ChatComponentProps) => {
           value={input}
           placeholder="Ask something..."
           onChange={handleInputChange}
+          disabled={props.isDisabled}
         />
         <button
           type="button"
           className="bg-brand-orange hover:bg-brand-orange-hover transition-colors duration-200 rounded-full p-2"
           onClick={props.handleShowPDF}
+          disabled={props.isDisabled}
         >
           {props.showPDF ? <EyeHide /> : <EyeShow />}
         </button>
