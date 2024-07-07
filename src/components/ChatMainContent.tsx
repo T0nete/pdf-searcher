@@ -14,7 +14,7 @@ type Props = {
 
 const ChatMainContent = (props: Props) => {
   const { targetReached } = useMediaQuery(768);
-  const [showPDF, setShowPDF] = React.useState(false);
+  const [showPDF, setShowPDF] = React.useState(true);
 
   const handleShowPDF = () => {
     setShowPDF((prev) => !prev);

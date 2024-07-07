@@ -9,9 +9,9 @@ const useMediaQuery = (width: number): IUseMediaQuery => {
 
   const updateTarget = useCallback(() => {
     if (window.innerWidth < width) {
-      setTargetReached(false);
-    } else {
       setTargetReached(true);
+    } else {
+      setTargetReached(false);
     }
   }, [width]);
 
