@@ -9,7 +9,7 @@ type HeaderProps = {
 };
 
 const Header = (props: HeaderProps) => {
-  const { toggleSidebar } = React.useContext(SidebarContext);
+  const { isSidebarOpen, toggleSidebar } = React.useContext(SidebarContext);
 
   return (
     <header
@@ -19,7 +19,7 @@ const Header = (props: HeaderProps) => {
       )}
     >
       <button
-        className="bg-brand-orange p-1 rounded-md hover:bg-brand-orange-hover duration-200 transition-colors"
+        className={`${isSidebarOpen ? 'bg-brand-orange-hover' : 'bg-brand-orange'} p-1 rounded-md hover:bg-brand-orange-hover duration-200 transition-colors`}
         onClick={toggleSidebar}
       >
         <Menu />
