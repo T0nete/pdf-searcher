@@ -31,7 +31,7 @@ const MainContentWrapper = (props: IMainContentWrapper) => {
           <ChatMainContent chatData={props.chatData} />
         ) : (
           <div className="flex h-full justify-center items-center">
-            <FileUpload handleIsLoading={handleIsLoading} className="w-80 h-80" />
+            <FileUpload handleIsLoading={handleIsLoading} className='' />
           </div>
         )}
       </main>

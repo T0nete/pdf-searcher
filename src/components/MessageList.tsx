@@ -18,8 +18,8 @@ const MessageList = (props: Props) => {
         >
           <p
             className={`rounded-md py-2 px-4 ${m.role === 'user'
-                ? 'justify-end bg-brand-orange text-white'
-                : 'text-start bg-light-gray'
+              ? 'justify-end bg-brand-orange border border-brand-orange text-white'
+              : 'text-start bg-dark-gray border border-light-gray'
               }`}
           >
             {m.content}

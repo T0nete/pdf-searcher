@@ -87,34 +87,37 @@ const FileUpload = (props: FileUploadProps) => {
   });
 
   return (
-    <div
-      {...getRootProps()}
-      className={`group rounded border border-light-gray bg-dark-gray hover:cursor-pointer hover:border-brand-orange shadow-md hover:shadow-brand-orange transition-all duration-300 ${isDragActive
-        ? 'border-brand-orange shadow-brand-orange transition-all duration-300'
-        : ''
-        }`}
-    >
-      <div className={cn("w-96 h-96 flex items-center justify-center", props.className)}>
-        <input {...getInputProps()} />
-        <div className="text-2xl">
-          {isLoading ? (
-            <div className="flex flex-row gap-2 items-center text-brand-orange">
-              <LoadingIcon className="h-12 w-12" />
-              <p>Processing...</p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center">
-              {isDragActive ? (
-                <p>Drop the files here ...</p>
+    <div className={cn('card-wrapper w-96 h-96', props.className)}>
+      <div className='card-content'>
+        <div
+          {...getRootProps()}
+          className={`group hover:cursor-pointer shadow-md ${isDragActive
+            ? 'border-brand-orange shadow-brand-orange transition-all duration-300'
+            : ''
+            }`}
+        >
+          <div className={cn("w-96 h-96 flex items-center justify-center", props.className)}>
+            <input {...getInputProps()} />
+            <div className="text-2xl">
+              {isLoading ? (
+                <div className="flex flex-row gap-2 items-center text-brand-orange">
+                  <LoadingIcon className="h-12 w-12" />
+                  <p>Processing...</p>
+                </div>
               ) : (
-                <p>Upload your PDF!</p>
+                <div className="flex flex-col items-center justify-center">
+                  {isDragActive ? (
+                    <p>Drop the files here ...</p>
+                  ) : (
+                    <p className={`text-dark-gray group-hover:text-white transition-colors`}>Upload your PDF!</p>
+                  )}
+                  <UploadIcon
+                    className={`w-24 h-24 text-dark-gray group-hover:text-white transition-colors duration-300 ${isDragActive ? 'text-white' : ' '}`}
+                  />
+                </div>
               )}
-              <UploadIcon
-                className={`w-24 h-24 text-light-gray group-hover:text-white transition-all duration-300 ${isDragActive ? 'text-white' : ' '
-                  }`}
-              />
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

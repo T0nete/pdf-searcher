@@ -8,12 +8,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'border-spin': {
+          '100%': {
+            transform: 'rotate(360deg)',
+          }
+        }
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
+        baloo: ['"Baloo Bhai 2"', 'cursive'],
         dosis: ['Dosis', 'sans-serif'],
       },
       colors: {

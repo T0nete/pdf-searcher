@@ -18,3 +18,33 @@ body {
     transform: rotate(360deg);
   }
 }
+
+
+@layer utilities {
+  /* Act as a border */
+  .card-wrapper {
+    @apply relative overflow-hidden rounded bg-gradient-to-b bg-light-gray;
+  }
+
+  .border-spin {
+    animation: spin 3s linear infinite
+  }
+
+  .card-wrapper::before {
+    background: conic-gradient(
+      rgba(255, 79, 24, 1) 0deg,
+      rgba(255, 127, 80, 1) 0deg,
+      transparent 80deg
+    );
+    @apply absolute left-[-25%] top-[-25%] h-[150%] w-[150%] border-spin content-[''];
+  }
+
+  .card-content {
+    @apply absolute left-[1px] top-[1px] h-[calc(100%-2px)] w-[calc(100%-2px)] rounded bg-light-gray
+  }
+
+  .grid-white {
+    @apply absolute inset-0 h-full w-full bg-dark-gray bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]
+  }
+
+}
