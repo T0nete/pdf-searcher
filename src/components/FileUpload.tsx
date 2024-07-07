@@ -109,10 +109,10 @@ const FileUpload = (props: FileUploadProps) => {
                   {isDragActive ? (
                     <p>Drop the files here ...</p>
                   ) : (
-                    <p className={`text-dark-gray group-hover:text-white transition-colors duration-300`}>Upload your PDF!</p>
+                    <p className={`text-light-gray-hover group-hover:text-white transition-colors duration-300`}>Upload your PDF!</p>
                   )}
                   <UploadIcon
-                    className={`w-24 h-24 text-dark-gray group-hover:text-white transition-colors duration-300 ${isDragActive ? 'text-white' : ' '}`}
+                    className={`w-24 h-24 text-light-gray-hover group-hover:text-white transition-colors duration-300 ${isDragActive ? 'text-white' : ' '}`}
                   />
                 </div>
               )}
